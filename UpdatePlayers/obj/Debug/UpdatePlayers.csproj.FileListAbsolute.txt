@@ -1,0 +1,14 @@
+C:\Users\6343\Desktop\FantasyFootball\FantasyFootball\UpdatePlayers\bin\Debug\UpdatePlayers.exe.config
+C:\Users\6343\Desktop\FantasyFootball\FantasyFootball\UpdatePlayers\bin\Debug\UpdatePlayers.exe
+C:\Users\6343\Desktop\FantasyFootball\FantasyFootball\UpdatePlayers\bin\Debug\UpdatePlayers.pdb
+C:\Users\6343\Desktop\FantasyFootball\FantasyFootball\UpdatePlayers\bin\Debug\EntityFramework.dll
+C:\Users\6343\Desktop\FantasyFootball\FantasyFootball\UpdatePlayers\bin\Debug\EntityFramework.SqlServer.dll
+C:\Users\6343\Desktop\FantasyFootball\FantasyFootball\UpdatePlayers\bin\Debug\Json.Net.dll
+C:\Users\6343\Desktop\FantasyFootball\FantasyFootball\UpdatePlayers\bin\Debug\Newtonsoft.Json.dll
+C:\Users\6343\Desktop\FantasyFootball\FantasyFootball\UpdatePlayers\bin\Debug\EntityFramework.xml
+C:\Users\6343\Desktop\FantasyFootball\FantasyFootball\UpdatePlayers\bin\Debug\EntityFramework.SqlServer.xml
+C:\Users\6343\Desktop\FantasyFootball\FantasyFootball\UpdatePlayers\bin\Debug\Newtonsoft.Json.xml
+C:\Users\6343\Desktop\FantasyFootball\FantasyFootball\UpdatePlayers\obj\Debug\UpdatePlayers.csprojAssemblyReference.cache
+C:\Users\6343\Desktop\FantasyFootball\FantasyFootball\UpdatePlayers\obj\Debug\UpdatePlayers.csproj.CopyComplete
+C:\Users\6343\Desktop\FantasyFootball\FantasyFootball\UpdatePlayers\obj\Debug\UpdatePlayers.exe
+C:\Users\6343\Desktop\FantasyFootball\FantasyFootball\UpdatePlayers\obj\Debug\UpdatePlayers.pdb

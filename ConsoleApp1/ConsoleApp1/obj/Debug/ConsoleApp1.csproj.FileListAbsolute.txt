@@ -1,0 +1,14 @@
+C:\Users\6343\source\repos\ConsoleApp1\ConsoleApp1\bin\Debug\ConsoleApp1.exe.config
+C:\Users\6343\source\repos\ConsoleApp1\ConsoleApp1\bin\Debug\ConsoleApp1.exe
+C:\Users\6343\source\repos\ConsoleApp1\ConsoleApp1\bin\Debug\ConsoleApp1.pdb
+C:\Users\6343\source\repos\ConsoleApp1\ConsoleApp1\obj\Debug\ConsoleApp1.csprojAssemblyReference.cache
+C:\Users\6343\source\repos\ConsoleApp1\ConsoleApp1\obj\Debug\ConsoleApp1.exe
+C:\Users\6343\source\repos\ConsoleApp1\ConsoleApp1\obj\Debug\ConsoleApp1.pdb
+C:\Users\6343\source\repos\ConsoleApp1\ConsoleApp1\bin\Debug\Json.Net.dll
+C:\Users\6343\source\repos\ConsoleApp1\ConsoleApp1\bin\Debug\Newtonsoft.Json.dll
+C:\Users\6343\source\repos\ConsoleApp1\ConsoleApp1\bin\Debug\Newtonsoft.Json.xml
+C:\Users\6343\source\repos\ConsoleApp1\ConsoleApp1\obj\Debug\ConsoleApp1.csproj.CopyComplete
+C:\Users\6343\source\repos\ConsoleApp1\ConsoleApp1\bin\Debug\EntityFramework.dll
+C:\Users\6343\source\repos\ConsoleApp1\ConsoleApp1\bin\Debug\EntityFramework.SqlServer.dll
+C:\Users\6343\source\repos\ConsoleApp1\ConsoleApp1\bin\Debug\EntityFramework.xml
+C:\Users\6343\source\repos\ConsoleApp1\ConsoleApp1\bin\Debug\EntityFramework.SqlServer.xml
