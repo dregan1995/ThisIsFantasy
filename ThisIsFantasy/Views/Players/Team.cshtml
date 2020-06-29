@@ -1,0 +1,68 @@
+﻿@model ThisIsFantasy.ViewModels.PlayerClubViewModel
+<div class="container" id="specteamdiv">
+    <div class="form-group">
+
+        @*@Html.DropDownList("drop1", ViewBag.data1 as IEnumerable<SelectListItem>, new { @class = "form-control", @id = "teamName" })*@
+        @*@foreach (var team in Model.Teams)*@
+        @*{
+
+            if (!Model.Teams.Any())
+            {
+
+
+                <p>We don't have any teams yet.</p>
+            }
+            else
+            {*@
+        <h2 class="h2"></h2>
+        <table id="specteamTable" class="table table-bordered table-hover">
+            <thead>
+                <tr>
+                    <th>Player Name</th>
+                    <th>Team Name</th>
+                    <th>Position</th>
+                    <th>Total Points</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var player in Model.Players)
+                {
+                    //if (player.Player.TeamId == team.Id && player.Player.Position != null)
+                    //{
+                    <tr>
+                        <td>@player.Name</td>
+                        <td>@player.TeamName</td>
+                        <td>@player.Position</td>
+                        @*@foreach (var playerStat in Model.PlayerStats)
+                            {
+                                if (player.Id == playerStat.PlayerId)
+                                {
+                                    <td>
+                                        @playerStat.TotalPoints
+                                    </td>
+                                }
+                            }*@
+                    </tr>
+                }
+
+            </tbody>
+        </table>
+    </div>
+</div>
+@*<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('table').hide();
+        });
+
+        function ViewTable(id) {
+            if ($('#' + id).is(":visible")) {
+                $('#' + id).hide();
+            } else {
+                $('#' + id).show();
+            }
+
+        }
+    </script>*@
+
+@*.append("<option value='" + row.StateId + "'>" + row.StateName + "</option>")*@

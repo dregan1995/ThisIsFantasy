@@ -1,0 +1,1542 @@
+﻿@model ThisIsFantasy.ViewModels.PlayerClubViewModel
+
+@{
+    ViewBag.Title = "Index";
+}
+    <div class="col-md-4 sidebyside">
+        <br />
+        @Html.DropDownList("drop1", ViewBag.data1 as IEnumerable<SelectListItem>, new { @class = "form-control" })
+
+        @foreach (var team in Model.Teams)
+        {
+
+
+            int number = 0;
+            number = number + 1;
+            string rowId = String.Format("sour{0}", number);
+            if (!Model.Teams.Any())
+            {
+
+
+                <p>We don't have any teams yet.</p>
+            }
+            else
+            {
+                <div id=@team.Id>
+                    <h2 class="h2" onclick="ViewTable(@team.Id);">@team.Name</h2>
+                    <table class="table table-bordered table-hover">
+                        <thead>
+                            <tr>
+                                <th hidden="hidden">Id</th>
+                                <th>Player Name</th>
+                                <th hidden="hidden">Team Name</th>
+                                <th>Position</th>
+                                <th>Total Points</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var player in Model.Players)
+                            {
+                                if (player.TeamId == team.Id && player.Position != null)
+                                {
+
+
+
+                                    <tr>
+                                        <td hidden="hidden">
+                                            <input type="text" value="@player.Id" name="Id" />
+                                        </td>
+                                        <td id="playerName">
+                                            <input type="button" value="@player.Name" name="Name" class="playerName" />
+                                        </td>
+                                        <td hidden="hidden">
+                                            <label id="TeamName">@team.Name</label>
+                                        </td>
+                                        <td id="position">@player.Position</td>
+                                        @foreach (var playerStat in Model.PlayerStats)
+                                        {
+                                            if (player.Id == playerStat.PlayerId)
+                                            {
+                                                <td>
+                                                    @*<input type="text" value="@playerStat.TotalPoints" name="TotalPoints" contenteditable="false" />*@
+                                                    <label id="TotalPoints">@playerStat.TotalPoints</label>
+                                                </td>
+                                            }
+                                        }
+                                    </tr>
+                                }
+                            }
+                        </tbody>
+                    </table>
+                </div>
+
+            }
+        }
+    </div>
+<div id="pv" class="sidebyside col-md-4">
+    @Html.Action("SelectedTeamPartialView", new { id = Url.RequestContext.RouteData.Values["id"] })
+</div>
+<div class="sidebyside col-md-4">
+    <h4>Team Name</h4>
+    <hr />
+    <button id="removePlayer1" class="linkStyle">X</button>
+    <br />
+    <button id="removePlayer2" class="linkStyle">X</button>
+    <br />
+    <button id="removePlayer3" class="linkStyle">X</button>
+    <br />
+    <button id="removePlayer4" class="linkStyle">X</button>
+    <br />
+    <button id="removePlayer5" class="linkStyle">X</button>
+    <br />
+    <button id="removePlayer6" class="linkStyle">X</button>
+    <br />
+    <button id="removePlayer7" class="linkStyle">X</button>
+    <br />
+    <button id="removePlayer8" class="linkStyle">X</button>
+    <br />
+    <button id="removePlayer9" class="linkStyle">X</button>
+    <br />
+    <button id="removePlayer10" class="linkStyle">X</button>
+    <br />
+    <button id="removePlayer11" class="linkStyle">X</button>
+    <br />
+    <button id="removePlayer12" class="linkStyle">X</button>
+    <br />
+    <button id="removePlayer13" class="linkStyle">X</button>
+    <br />
+    <button id="removePlayer14" class="linkStyle">X</button>
+    <br />
+    <button id="removePlayer15" class="linkStyle">X</button>
+</div>
+
+
+@*@foreach (var player in Model.Players)
+    {
+        if (player.Position == "Attacker" )
+        {
+            <tr>
+                <td>@player.Name</td>
+                <td>@player.TeamName</td>
+                <td>@player.Position</td>
+                @foreach (var playerStat in Model.PlayerStats)
+                {
+                    if (player.Id == playerStat.PlayerId)
+                    {
+                        <td>
+                            @playerStat.TotalPoints
+                        </td>
+                    }
+                }
+            </tr>
+        }
+    }*@
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+<script type="text/javascript" src="http://ajax.cdnjs.com/ajax/libs/json2/20110223/json2.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<script type="text/javascript">
+    
+    $(document).ready(function () {
+        //$('table').hide();
+        var url = window.location.href;
+        var id = url.substring(url.lastIndexOf('/') + 1);
+        var n = id.indexOf("?");
+        var ex = id.substring(0, n);
+        alert(ex);
+        var id2 = url.substring(url.lastIndexOf('=') + 1);
+        alert(id2);
+
+        
+        $('#removePlayer1').hide();
+        $('#removePlayer2').hide();
+        $('#removePlayer3').hide();
+        $('#removePlayer4').hide(); $('#removePlayer5').hide(); $('#removePlayer6').hide();
+        $('#removePlayer7').hide();
+        $('#removePlayer8').hide();
+        $('#removePlayer9').hide();
+        $('#removePlayer10').hide();
+        $('#removePlayer11').hide();
+        $('#removePlayer12').hide();
+        $('#removePlayer13').hide();
+        $('#removePlayer14').hide();
+        $('#removePlayer15').hide();
+        $('#62').hide();
+        $('#57').hide();
+        $('#58').hide();
+        $('#61').hide();
+        $('#64').hide();
+        $('#65').hide();
+        $('#66').hide();
+        $('#67').hide();
+        $('#68').hide();
+        $('#73').hide();
+        $('#76').hide();
+        $('#328').hide();
+        $('#338').hide();
+        $('#340').hide();
+        $('#346').hide();
+        $('#354').hide();
+        $('#356').hide();
+        $('#397').hide();
+        $('#563').hide();
+        $('#1044').hide();
+        $("#drop1").change(function () {
+            var id = $('#drop1').val();
+            if ($('#62').is(":visible")) {
+                $('#62').hide();
+                $('#' + id).show();
+            }
+            if ($('#57').is(":visible")) {
+                $('#57').hide();
+                $('#' + id).show();
+            }
+            if ($('#58').is(":visible")) {
+                $('#58').hide();
+                $('#' + id).show();
+            }
+            if ($('#61').is(":visible")) {
+                $('#61').hide();
+                $('#' + id).show();
+            }
+            if ($('#64').is(":visible")) {
+                $('#64').hide();
+                $('#' + id).show();
+            }
+            if ($('#65').is(":visible")) {
+                $('#65').hide();
+                $('#' + id).show();
+            }
+            if ($('#66').is(":visible")) {
+                $('#66').hide();
+                $('#' + id).show();
+            }
+            if ($('#67').is(":visible")) {
+                $('#67').hide();
+                $('#' + id).show();
+            }
+            if ($('#68').is(":visible")) {
+                $('#68').hide();
+                $('#' + id).show();
+            }
+            if ($('#73').is(":visible")) {
+                $('#73').hide();
+                $('#' + id).show();
+            }
+            if ($('#76').is(":visible")) {
+                $('#76').hide();
+                $('#' + id).show();
+            }
+            if ($('#328').is(":visible")) {
+                $('#328').hide();
+                $('#' + id).show();
+            }
+            if ($('#338').is(":visible")) {
+                $('#338').hide();
+                $('#' + id).show();
+            }
+            if ($('#340').is(":visible")) {
+                $('#340').hide();
+                $('#' + id).show();
+            }
+            if ($('#346').is(":visible")) {
+                $('#346').hide();
+                $('#' + id).show();
+            }
+            if ($('#354').is(":visible")) {
+                $('#354').hide();
+                $('#' + id).show();
+            }
+            if ($('#356').is(":visible")) {
+                $('#356').hide();
+                $('#' + id).show();
+            }
+            if ($('#397').is(":visible")) {
+                $('#397').hide();
+                $('#' + id).show();
+            }
+            if ($('#563').is(":visible")) {
+                $('#563').hide();
+                $('#' + id).show();
+            }
+            if ($('#1044').is(":visible")) {
+                $('#1044').hide();
+                $('#' + id).show();
+            }
+            $('#' + id).show();
+        });
+    });
+
+    //function ViewTable(id) {
+    //    if ($('#' + id).is(":visible")) {
+    //        $('#' + id).hide();
+    //    } else {
+    //        $('#' + id).show();
+    //    }
+
+    //    function HideTable(id) {
+    //            $('#' + id).hide();
+    //        }
+
+    //}
+    var cclick = 0;
+    var TeamSelected1 = "";
+    var PlayerName1 = "";
+    var PlayerId1 = "";
+    var TotalPoints1 = "";
+    var TeamSelected2 = "";
+    var PlayerName2 = "";
+    var PlayerId2 = "";
+    var TotalPoints2 = "";
+    var TeamSelected3 = "";
+    var PlayerName3 = "";
+    var PlayerId3 = "";
+    var TotalPoints3 = "";
+    var TeamSelected4 = "";
+    var PlayerName4 = "";
+    var PlayerId4 = "";
+    var TotalPoints4 = "";
+    var TeamSelected5 = "";
+    var PlayerName5 = "";
+    var PlayerId5 = "";
+    var TotalPoints5 = "";
+    var TeamSelected6 = "";
+    var PlayerName6 = "";
+    var PlayerId6 = "";
+    var TotalPoints6 = "";
+    var TeamSelected7 = "";
+    var PlayerName7 = "";
+    var PlayerId7 = "";
+    var TotalPoints7 = "";
+    var TeamSelected8 = "";
+    var PlayerName8 = "";
+    var PlayerId8 = "";
+    var TotalPoints8 = "";
+    var TeamSelected9 = "";
+    var PlayerName9 = "";
+    var PlayerId9 = "";
+    var TotalPoints9 = "";
+    var TeamSelected10 = "";
+    var PlayerName10 = "";
+    var PlayerId10 = "";
+    var TotalPoints10 = "";
+    var TeamSelected11 = "";
+    var PlayerName11 = "";
+    var PlayerId11 = "";
+    var TotalPoints11 = "";
+    var TeamSelected12 = "";
+    var PlayerName12 = "";
+    var PlayerId12 = "";
+    var TotalPoints12 = "";
+    var TeamSelected13 = "";
+    var PlayerName13 = "";
+    var PlayerId13 = "";
+    var TotalPoints13 = "";
+    var TeamSelected14 = "";
+    var PlayerName14 = "";
+    var PlayerId14 = "";
+    var TotalPoints14 = "";
+    var TeamSelected15 = "";
+    var PlayerName15 = "";
+    var PlayerId15 = "";
+    var TotalPoints15 = "";
+
+    var pp12 = ""
+
+
+    $(".playerName").click(function () {
+        //var teamsSelected = [team1, team2, team3, team4, team5, team6, team7, team8, team9, team10, team11, team12, team13, team14, team15];
+        cclick = cclick + 1;
+
+        if (PlayerId1 == "") {
+            var tr = $(this).closest('tr');
+            TeamSelected1 = tr.find('label[id = "TeamName"]').text();
+            PlayerName1 = tr.find('input[name="Name"]').val();
+            PlayerId1 = tr.find('input[name="Id"]').val();
+            TotalPoints1 = tr.find('label[id="TotalPoints"]').text();
+            validateFirstTeam(TeamSelected1, PlayerName1, PlayerId1, TotalPoints1);
+        }
+        else if (PlayerId2 == "") {
+            var tr = $(this).closest('tr');
+            var ts1 = TeamSelected1;
+            var pi1 = PlayerId1;
+            TeamSelected2 = tr.find('label[id = "TeamName"]').text();
+            PlayerName2 = tr.find('input[name="Name"]').val();
+            PlayerId2 = tr.find('input[name="Id"]').val();
+            TotalPoints2 = tr.find('label[id="TotalPoints"]').text();
+            validateSecondTeam(ts1, pi1,
+                TeamSelected2, PlayerName2, PlayerId2, TotalPoints2);
+        }
+        else if (PlayerId3 == "") {
+            var tr = $(this).closest('tr');
+            TeamSelected3 = tr.find('label[id = "TeamName"]').text();
+            PlayerName3 = tr.find('input[name="Name"]').val();
+            PlayerId3 = tr.find('input[name="Id"]').val();
+            TotalPoints3 = tr.find('label[id="TotalPoints"]').text();
+            validateThirdTeam(TeamSelected1, PlayerId1,
+                TeamSelected2, PlayerId2,
+                TeamSelected3, PlayerName3, PlayerId3, TotalPoints3);
+        }
+        else if (PlayerId4 == "") {
+            var tr = $(this).closest('tr');
+            TeamSelected4 = tr.find('label[id = "TeamName"]').text();
+            PlayerName4 = tr.find('input[name="Name"]').val();
+            PlayerId4 = tr.find('input[name="Id"]').val();
+            TotalPoints4 = tr.find('label[id="TotalPoints"]').text();
+            validateFourthTeam(TeamSelected1, PlayerId1,
+                TeamSelected2, PlayerId2,
+                TeamSelected3, PlayerId3,
+                TeamSelected4, PlayerName4, PlayerId4, TotalPoints4);
+        }
+        else if (PlayerId5 == "") {
+            var tr = $(this).closest('tr');
+            TeamSelected5 = tr.find('label[id = "TeamName"]').text();
+            PlayerName5 = tr.find('input[name="Name"]').val();
+            PlayerId5 = tr.find('input[name="Id"]').val();
+            TotalPoints5 = tr.find('label[id="TotalPoints"]').text();
+            validateFifthTeam(TeamSelected1, PlayerId1,
+                TeamSelected2, PlayerId2,
+                TeamSelected3, PlayerId3,
+                TeamSelected4, PlayerId4,
+                TeamSelected5, PlayerName5, PlayerId5, TotalPoints5);
+        }
+        else if (PlayerId6 == "") {
+            var tr = $(this).closest('tr');
+            TeamSelected6 = tr.find('label[id = "TeamName"]').text();
+            PlayerName6 = tr.find('input[name="Name"]').val();
+            PlayerId6 = tr.find('input[name="Id"]').val();
+            TotalPoints6 = tr.find('label[id="TotalPoints"]').text();
+            validateSixthTeam(TeamSelected1, PlayerId1,
+                TeamSelected2, PlayerId2,
+                TeamSelected3, PlayerId3,
+                TeamSelected4, PlayerId4,
+                TeamSelected5, PlayerId5,
+                TeamSelected6, PlayerName6, PlayerId6, TotalPoints6);
+        }
+        else if (PlayerId7 == "") {
+            var tr = $(this).closest('tr');
+            TeamSelected7 = tr.find('label[id = "TeamName"]').text();
+            PlayerName7 = tr.find('input[name="Name"]').val();
+            PlayerId7 = tr.find('input[name="Id"]').val();
+            TotalPoints7 = tr.find('label[id="TotalPoints"]').text();
+            validateSeventhTeam(TeamSelected1, PlayerId1,
+                TeamSelected2, PlayerId2,
+                TeamSelected3, PlayerId3,
+                TeamSelected4, PlayerId4,
+                TeamSelected5, PlayerId5,
+                TeamSelected6, PlayerId6,
+                TeamSelected7, PlayerName7, PlayerId7, TotalPoints7);
+        }
+        else if (PlayerId8 == "") {
+            var tr = $(this).closest('tr');
+            TeamSelected8 = tr.find('label[id = "TeamName"]').text();
+            PlayerName8 = tr.find('input[name="Name"]').val();
+            PlayerId8 = tr.find('input[name="Id"]').val();
+            TotalPoints8 = tr.find('label[id="TotalPoints"]').text();
+            validateEighthTeam(TeamSelected1, PlayerId1,
+                TeamSelected2, PlayerId2,
+                TeamSelected3, PlayerId3,
+                TeamSelected4, PlayerId4,
+                TeamSelected5, PlayerId5,
+                TeamSelected6, PlayerId6,
+                TeamSelected7, PlayerId7,
+                TeamSelected8, PlayerName8, PlayerId8, TotalPoints8);
+        }
+        else if (PlayerId9 == "") {
+            var tr = $(this).closest('tr');
+            TeamSelected9 = tr.find('label[id = "TeamName"]').text();
+            PlayerName9 = tr.find('input[name="Name"]').val();
+            PlayerId9 = tr.find('input[name="Id"]').val();
+            TotalPoints9 = tr.find('label[id="TotalPoints"]').text();
+            validateNinthTeam(TeamSelected1, PlayerId1,
+                TeamSelected2, PlayerId2,
+                TeamSelected3, PlayerId3,
+                TeamSelected4, PlayerId4,
+                TeamSelected5, PlayerId5,
+                TeamSelected6, PlayerId6,
+                TeamSelected7, PlayerId7,
+                TeamSelected8, PlayerId8,
+                TeamSelected9, PlayerName9, PlayerId9, TotalPoints9);
+        }
+        else if (PlayerId10 == "") {
+            var tr = $(this).closest('tr');
+            TeamSelected10 = tr.find('label[id = "TeamName"]').text();
+            PlayerName10 = tr.find('input[name="Name"]').val();
+            PlayerId10 = tr.find('input[name="Id"]').val();
+            TotalPoints10 = tr.find('label[id="TotalPoints"]').text();
+            validateTenthTeam(TeamSelected1, PlayerId1,
+                TeamSelected2, PlayerId2,
+                TeamSelected3, PlayerId3,
+                TeamSelected4, PlayerId4,
+                TeamSelected5, PlayerId5,
+                TeamSelected6, PlayerId6,
+                TeamSelected7, PlayerId7,
+                TeamSelected8, PlayerId8,
+                TeamSelected9, PlayerId9,
+                TeamSelected10, PlayerName10, PlayerId10, TotalPoints10);
+        }
+        else if (PlayerId11 == "") {
+            var tr = $(this).closest('tr');
+            TeamSelected11 = tr.find('label[id = "TeamName"]').text();
+            PlayerName11 = tr.find('input[name="Name"]').val();
+            PlayerId11 = tr.find('input[name="Id"]').val();
+            TotalPoints11 = tr.find('label[id="TotalPoints"]').text();
+            validateEleventhTeam(TeamSelected1, PlayerId1,
+                TeamSelected2, PlayerId2,
+                TeamSelected3, PlayerId3,
+                TeamSelected4, PlayerId4,
+                TeamSelected5, PlayerId5,
+                TeamSelected6, PlayerId6,
+                TeamSelected7, PlayerId7,
+                TeamSelected8, PlayerId8,
+                TeamSelected9, PlayerId9,
+                TeamSelected10, PlayerId10,
+                TeamSelected11, PlayerName11, PlayerId11, TotalPoints11);
+        }
+        else if (PlayerId12 == "") {
+            var tr = $(this).closest('tr');
+            TeamSelected12 = tr.find('label[id = "TeamName"]').text();
+            PlayerName12 = tr.find('input[name="Name"]').val();
+            PlayerId12 = tr.find('input[name="Id"]').val();
+            TotalPoints12 = tr.find('label[id="TotalPoints"]').text();
+            validateTwelvethTeam(TeamSelected1, PlayerId1,
+                TeamSelected2, PlayerId2,
+                TeamSelected3, PlayerId3,
+                TeamSelected4, PlayerId4,
+                TeamSelected5, PlayerId5,
+                TeamSelected6, PlayerId6,
+                TeamSelected7, PlayerId7,
+                TeamSelected8, PlayerId8,
+                TeamSelected9, PlayerId9,
+                TeamSelected10, PlayerId10,
+                TeamSelected11, PlayerId11,
+                TeamSelected12, PlayerName12, PlayerId12, TotalPoints12);
+        }
+        else if (PlayerId13 == "") {
+            var tr = $(this).closest('tr');
+            TeamSelected13 = tr.find('label[id = "TeamName"]').text();
+            PlayerName13 = tr.find('input[name="Name"]').val();
+            PlayerId13 = tr.find('input[name="Id"]').val();
+            TotalPoints13 = tr.find('label[id="TotalPoints"]').text();
+            validateThirteenthTeam(TeamSelected1, PlayerId1,
+                TeamSelected2, PlayerId2,
+                TeamSelected3, PlayerId3,
+                TeamSelected4, PlayerId4,
+                TeamSelected5, PlayerId5,
+                TeamSelected6, PlayerId6,
+                TeamSelected7, PlayerId7,
+                TeamSelected8, PlayerId8,
+                TeamSelected9, PlayerId9,
+                TeamSelected10, PlayerId10,
+                TeamSelected11, PlayerId11,
+                TeamSelected12, PlayerId12,
+                TeamSelected13, PlayerName13, PlayerId13, TotalPoints13);
+        }
+        else if (PlayerId14 == "") {
+            var tr = $(this).closest('tr');
+            TeamSelected14 = tr.find('label[id = "TeamName"]').text();
+            PlayerName14 = tr.find('input[name="Name"]').val();
+            PlayerId14 = tr.find('input[name="Id"]').val();
+            TotalPoints14 = tr.find('label[id="TotalPoints"]').text();
+            validateFourteenthTeam(TeamSelected1, PlayerId1,
+                TeamSelected2, PlayerId2,
+                TeamSelected3, PlayerId3,
+                TeamSelected4, PlayerId4,
+                TeamSelected5, PlayerId5,
+                TeamSelected6, PlayerId6,
+                TeamSelected7, PlayerId7,
+                TeamSelected8, PlayerId8,
+                TeamSelected9, PlayerId9,
+                TeamSelected10, PlayerId10,
+                TeamSelected11, PlayerId11,
+                TeamSelected12, PlayerId12,
+                TeamSelected13, PlayerId13,
+                TeamSelected14, PlayerName14, PlayerId14, TotalPoints14);
+        }
+        else if (PlayerId15 == "") {
+            var tr = $(this).closest('tr');
+            TeamSelected15 = tr.find('label[id = "TeamName"]').text();
+            PlayerName15 = tr.find('input[name="Name"]').val();
+            PlayerId15 = tr.find('input[name="Id"]').val();
+            TotalPoints15 = tr.find('label[id="TotalPoints"]').text();
+            validateFifteenthTeam(TeamSelected1, PlayerId1,
+                TeamSelected2, PlayerId2,
+                TeamSelected3, PlayerId3,
+                TeamSelected4, PlayerId4,
+                TeamSelected5, PlayerId5,
+                TeamSelected6, PlayerId6,
+                TeamSelected7, PlayerId7,
+                TeamSelected8, PlayerId8,
+                TeamSelected9, PlayerId9,
+                TeamSelected10, PlayerId10,
+                TeamSelected11, PlayerId11,
+                TeamSelected12, PlayerId12,
+                TeamSelected13, PlayerId13,
+                TeamSelected14, PlayerId14,
+                TeamSelected15, PlayerName15, PlayerId15, TotalPoints15);
+        }
+
+
+    });
+
+    function validateFirstTeam(teamName1, playerName1, playerId1, totalPoints1) {
+        var root = "https://localhost:44324/api/ManageTeams/";
+        var url = window.location.href;
+        var id = url.substring(url.lastIndexOf('/') + 1);
+        var fullurl = root.concat(id);
+        var player1 = { "Id": id, "PlayerName1": playerName1, "PlayerStatId1": playerId1, "TotalPoints1": totalPoints1 };
+        $.ajax({
+            type: "PUT",
+            data: JSON.stringify(player1),
+            url: fullurl,
+            contentType: "application/json",
+        });
+        //var controller = '/ManageTeams/SelectedTeamPartialView/';
+        //var controllerId = controller.concat(id);
+        //$('#pv').html(controllerId);
+        //$('#pv').load(controllerId);
+        ////alert("first");
+        $('#removePlayer1').show();
+        Reload();
+        
+    }
+
+
+    function validateSecondTeam(teamSelected1, playerId1, teamSelected2, playerName2, playerId2, totalPoints2) {
+        //alert(TeamSelected1 + PlayerId1 + TeamSelected2 + PlayerName2 + PlayerId2 + TotalPoints2);
+        var root = "https://localhost:44324/api/ManageTeams/";
+        var url = window.location.href;
+        var id = url.substring(url.lastIndexOf('/') + 1);
+        var fullurl = root.concat(id);
+        var team1 = teamSelected1;
+        var team2 = teamSelected2
+        var teams = [team1];
+        var t = teams.includes(team2);
+
+        var player1 = playerId1;
+        var player2 = playerId2;
+        var players = [player1];
+        var p = players.includes(player2);
+        if (p == true) {
+            TeamSelected2 = "";
+            PlayerId2 = "";
+            PlayerName2 = "";
+            TotalPoints2 = "";
+            alert("Player Selected Already")
+        }
+
+        else if (t == true) {
+            TeamSelected2 = "";
+            PlayerId2 = "";
+            PlayerName2 = "";
+            TotalPoints2 = "";
+            alert("Too many players selected from")
+        }
+        else {
+            var player2 = { "Id": id, "PlayerName2": playerName2, "PlayerStatId2": playerId2, "TotalPoints2": totalPoints2 };
+            $.ajax({
+                type: "PUT",
+                data: JSON.stringify(player2),
+                url: fullurl,
+                contentType: "application/json",
+            });
+
+        //    var controller = '/ManageTeams/SelectedTeamPartialView/';
+        //var controllerId = controller.concat(id);
+        //    $('#pv').html(controllerId);
+            //$('#pv').load(controllerId);
+            $('#removePlayer2').show();
+            Reload();
+            
+        }
+        
+        
+        
+    }
+
+    function validateThirdTeam(teamSelected1, playerId1, teamSelected2, playerId2, teamSelected3, playerName3, playerId3, totalPoints3) {
+        //alert(TeamSelected1 + PlayerId1 + TeamSelected2 + PlayerName2 + PlayerId2 + TotalPoints2);
+        var root = "https://localhost:44324/api/ManageTeams/";
+        var url = window.location.href;
+        var id = url.substring(url.lastIndexOf('/') + 1);
+        var fullurl = root.concat(id);
+        var team1 = teamSelected1;
+             var team2 = teamSelected2
+             var team3 = teamSelected3;
+             var teams = [team1, team2];
+        var t = teams.includes(team3);
+
+        var player1 = playerId1;
+        var player2 = playerId2;
+        var player3 = playerId3;
+             var players = [player1, player2];
+        var p = players.includes(player3);
+
+        if (p == true) {
+            TeamSelected3 = "";
+            PlayerId3 = "";
+            PlayerName3 = "";
+            TotalPoints3 = "";
+            alert("Player Selected Already")
+        }
+
+        else if (t == true) {
+            TeamSelected3 = "";
+            PlayerId3 = "";
+            PlayerName3 = "";
+            TotalPoints3 = "";
+            alert("Too many players selected from")
+        }
+        else {
+            var player3 = { "Id": id, "PlayerName3": playerName3, "PlayerStatId3": playerId3, "TotalPoints3": totalPoints3 };
+            $.ajax({
+                type: "PUT",
+                data: JSON.stringify(player3),
+                url: fullurl,
+                contentType: "application/json",
+            });
+        //    var controller = '/ManageTeams/SelectedTeamPartialView/';
+        //var controllerId = controller.concat(id);
+        //    $('#pv').html(controllerId);
+            //$('#pv').load(controllerId);
+            $('#removePlayer3').show();
+            Reload();
+        
+        }        
+       
+    }
+
+    function validateFourthTeam(teamSelected1, playerId1,
+                teamSelected2, playerId2,
+                teamSelected3, playerId3,
+                teamSelected4, playerName4, playerId4, totalPoints4) {
+        //alert(TeamSelected1 + PlayerId1 + TeamSelected2 + PlayerName2 + PlayerId2 + TotalPoints2);
+        var root = "https://localhost:44324/api/ManageTeams/";
+        var url = window.location.href;
+        var id = url.substring(url.lastIndexOf('/') + 1);
+        var fullurl = root.concat(id);
+        var team1 = teamSelected1;
+        var team2 = teamSelected2;
+        var team3 = teamSelected3;
+        var team4 = teamSelected4;
+             var teams = [team1, team2,team3];
+        var t = teams.includes(team4);
+
+        var player1 = playerId1;
+        var player2 = playerId2;
+        var player3 = playerId3;
+        var player4 = playerId4;
+             var players = [player1, player2,player3];
+        var p = players.includes(player4);
+
+        if (p == true) {
+            TeamSelected4 = "";
+            PlayerId4 = "";
+            PlayerName4 = "";
+            TotalPoints4 = "";
+            alert("Player Selected Already")
+        }
+
+        else if (t == true) {
+            TeamSelected4 = "";
+            PlayerId4 = "";
+            PlayerName4 = "";
+            TotalPoints4 = "";
+            alert("Too many players selected from")
+        }
+        else {
+            var player4 = { "Id": id, "PlayerName4": playerName4, "PlayerStatId4": playerId4, "TotalPoints4": totalPoints4 };
+            $.ajax({
+                type: "PUT",
+                data: JSON.stringify(player4),
+                url: fullurl,
+                contentType: "application/json",
+            });
+            $('#removePlayer4').show();
+            Reload();
+        }
+        
+        
+    }
+
+    function validateFifthTeam(teamSelected1, playerId1,
+                teamSelected2, playerId2,
+                teamSelected3, playerId3,
+                teamSelected4, playerId4,
+                teamSelected5, playerName5, playerId5, totalPoints5) {
+        //alert(TeamSelected1 + PlayerId1 + TeamSelected2 + PlayerName2 + PlayerId2 + TotalPoints2);
+        var root = "https://localhost:44324/api/ManageTeams/";
+        var url = window.location.href;
+        var id = url.substring(url.lastIndexOf('/') + 1);
+        var fullurl = root.concat(id);
+        var team1 = teamSelected1;
+        var team2 = teamSelected2;
+        var team3 = teamSelected3;
+        var team4 = teamSelected4;
+        var team5 = teamSelected5;
+             var teams = [team1, team2,team3, team4];
+        var t = teams.includes(team5);
+
+        var player1 = playerId1;
+        var player2 = playerId2;
+        var player3 = playerId3;
+        var player4 = playerId4;
+        var player5 = playerId5;
+             var players = [player1, player2,player3, player4];
+        var p = players.includes(player5);
+
+        if (p == true) {
+            TeamSelected5 = "";
+            PlayerId5 = "";
+            PlayerName5 = "";
+            TotalPoints5 = "";
+            alert("Player Selected Already")
+        }
+
+        else if (t == true) {
+            TeamSelected5 = "";
+            PlayerId5 = "";
+            PlayerName5 = "";
+            TotalPoints5 = "";
+            alert("Too many players selected from")
+        }
+        else {
+            var player5 = { "Id": id, "PlayerName5": playerName5, "PlayerStatId5": playerId5, "TotalPoints5": totalPoints5 };
+            $.ajax({
+                type: "PUT",
+                data: JSON.stringify(player5),
+                url: fullurl,
+                contentType: "application/json",
+            });
+            $('#removePlayer5').show();
+            Reload();
+        }
+        
+        
+    }
+
+    function validateSixthTeam(teamSelected1, playerId1,
+                teamSelected2, playerId2,
+                teamSelected3, playerId3,
+                teamSelected4, playerId4,
+                teamSelected5, playerId5,
+                teamSelected6, playerName6, playerId6, totalPoints6) {
+        //alert(TeamSelected1 + PlayerId1 + TeamSelected2 + PlayerName2 + PlayerId2 + TotalPoints2);
+        var root = "https://localhost:44324/api/ManageTeams/";
+        var url = window.location.href;
+        var id = url.substring(url.lastIndexOf('/') + 1);
+        var fullurl = root.concat(id);
+        var team1 = teamSelected1;
+        var team2 = teamSelected2;
+        var team3 = teamSelected3;
+        var team4 = teamSelected4;
+        var team5 = teamSelected5;
+        var team6 = teamSelected6;
+             var teams = [team1, team2,team3, team4,team5];
+        var t = teams.includes(team6);
+
+        var player1 = playerId1;
+        var player2 = playerId2;
+        var player3 = playerId3;
+        var player4 = playerId4;
+        var player5 = playerId5;
+        var player6 = playerId6;
+             var players = [player1, player2,player3, player4,player5];
+        var p = players.includes(player6);
+
+        if (p == true) {
+            TeamSelected6 = "";
+            PlayerId6 = "";
+            PlayerName6 = "";
+            TotalPoints6 = "";
+            alert("Player Selected Already")
+        }
+
+        else if (t == true) {
+            TeamSelected6 = "";
+            PlayerId6 = "";
+            PlayerName6 = "";
+            TotalPoints6 = "";
+            alert("Too many players selected from")
+        }
+        else {
+            var player6 = { "Id": id, "PlayerName6": playerName6, "PlayerStatId6": playerId6, "TotalPoints6": totalPoints6 };
+            $.ajax({
+                type: "PUT",
+                data: JSON.stringify(player6),
+                url: fullurl,
+                contentType: "application/json",
+            });
+            $('#removePlayer6').show();
+            Reload();
+        }
+        
+        
+    }
+
+    function validateSeventhTeam(teamSelected1, playerId1,
+                teamSelected2, playerId2,
+                teamSelected3, playerId3,
+                teamSelected4, playerId4,
+                teamSelected5, playerId5,
+                teamSelected6, playerId6,
+                teamSelected7, playerName7, playerId7, totalPoints7) {
+        //alert(TeamSelected1 + PlayerId1 + TeamSelected2 + PlayerName2 + PlayerId2 + TotalPoints2);
+        var root = "https://localhost:44324/api/ManageTeams/";
+        var url = window.location.href;
+        var id = url.substring(url.lastIndexOf('/') + 1);
+        var fullurl = root.concat(id);
+        var team1 = teamSelected1;
+        var team2 = teamSelected2;
+        var team3 = teamSelected3;
+        var team4 = teamSelected4;
+        var team5 = teamSelected5;
+        var team6 = teamSelected6;
+        var team7 = teamSelected7;
+             var teams = [team1, team2,team3, team4,team5, team6];
+        var t = teams.includes(team7);
+
+        var player1 = playerId1;
+        var player2 = playerId2;
+        var player3 = playerId3;
+        var player4 = playerId4;
+        var player5 = playerId5;
+        var player6 = playerId6;
+        var player7 = playerId7;
+             var players = [player1, player2,player3, player4,player5, player6];
+        var p = players.includes(player7);
+
+        if (p == true) {
+            TeamSelected7 = "";
+            PlayerId7 = "";
+            PlayerName7 = "";
+            TotalPoints7 = "";
+            alert("Player Selected Already")
+        }
+
+        else if (t == true) {
+            TeamSelected7 = "";
+            PlayerId7 = "";
+            PlayerName7 = "";
+            TotalPoints7 = "";
+            alert("Too many players selected from")
+        }
+        else {
+            var player7 = { "Id": id, "PlayerName7": playerName7, "PlayerStatId7": playerId7, "TotalPoints7": totalPoints7 };
+            $.ajax({
+                type: "PUT",
+                data: JSON.stringify(player7),
+                url: fullurl,
+                contentType: "application/json",
+            });
+            $('#removePlayer7').show();
+             Reload();
+        }
+        
+    }
+
+    function validateEighthTeam(teamSelected1, playerId1,
+                teamSelected2, playerId2,
+                teamSelected3, playerId3,
+                teamSelected4, playerId4,
+                teamSelected5, playerId5,
+                teamSelected6, playerId6,
+                teamSelected7, playerId7,
+                teamSelected8, playerName8, playerId8, totalPoints8) {
+        //alert(TeamSelected1 + PlayerId1 + TeamSelected2 + PlayerName2 + PlayerId2 + TotalPoints2);
+        var root = "https://localhost:44324/api/ManageTeams/";
+        var url = window.location.href;
+        var id = url.substring(url.lastIndexOf('/') + 1);
+        var fullurl = root.concat(id);
+        var team1 = teamSelected1;
+        var team2 = teamSelected2;
+        var team3 = teamSelected3;
+        var team4 = teamSelected4;
+        var team5 = teamSelected5;
+        var team6 = teamSelected6;
+        var team7 = teamSelected7;
+        var team8 = teamSelected8;
+             var teams = [team1, team2,team3, team4,team5, team6,team7];
+        var t = teams.includes(team8);
+
+        var player1 = playerId1;
+        var player2 = playerId2;
+        var player3 = playerId3;
+        var player4 = playerId4;
+        var player5 = playerId5;
+        var player6 = playerId6;
+        var player7 = playerId7;
+        var player8 = playerId8;
+             var players = [player1, player2,player3, player4,player5, player6,player7];
+        var p = players.includes(player8);
+
+        if (p == true) {
+            TeamSelected8 = "";
+            PlayerId8 = "";
+            PlayerName8 = "";
+            TotalPoints8 = "";
+            alert("Player Selected Already")
+        }
+
+        else if (t == true) {
+            TeamSelected8 = "";
+            PlayerId8 = "";
+            PlayerName8 = "";
+            TotalPoints8 = "";
+            alert("Too many players selected from")
+        }
+        else {
+            var player8 = { "Id": id, "PlayerName8": playerName8, "PlayerStatId8": playerId8, "TotalPoints8": totalPoints8 };
+            $.ajax({
+                type: "PUT",
+                data: JSON.stringify(player8),
+                url: fullurl,
+                contentType: "application/json",
+            });
+            $('#removePlayer8').show();
+            Reload();
+        }
+        
+    }
+    function validateNinthTeam(teamSelected1, playerId1,
+                teamSelected2, playerId2,
+                teamSelected3, playerId3,
+                teamSelected4, playerId4,
+                teamSelected5, playerId5,
+                teamSelected6, playerId6,
+                teamSelected7, playerId7,
+                teamSelected8, playerId8,
+                teamSelected9, playerName9, playerId9, totalPoints9) {
+        //alert(TeamSelected1 + PlayerId1 + TeamSelected2 + PlayerName2 + PlayerId2 + TotalPoints2);
+        var root = "https://localhost:44324/api/ManageTeams/";
+        var url = window.location.href;
+        var id = url.substring(url.lastIndexOf('/') + 1);
+        var fullurl = root.concat(id);
+        var team1 = teamSelected1;
+        var team2 = teamSelected2;
+        var team3 = teamSelected3;
+        var team4 = teamSelected4;
+        var team5 = teamSelected5;
+        var team6 = teamSelected6;
+        var team7 = teamSelected7;
+        var team8 = teamSelected8;
+        var team9 = teamSelected9;
+             var teams = [team1, team2,team3, team4,team5, team6,team7, team8];
+        var t = teams.includes(team9);
+
+        var player1 = playerId1;
+        var player2 = playerId2;
+        var player3 = playerId3;
+        var player4 = playerId4;
+        var player5 = playerId5;
+        var player6 = playerId6;
+        var player7 = playerId7;
+        var player8 = playerId8;
+        var player9 = playerId9;
+             var players = [player1, player2,player3, player4,player5, player6,player7, player8];
+        var p = players.includes(player9);
+
+        if (p == true) {
+            TeamSelected9 = "";
+            PlayerId9 = "";
+            PlayerName9 = "";
+            TotalPoints9 = "";
+            alert("Player Selected Already")
+        }
+
+        else if (t == true) {
+            TeamSelected9 = "";
+            PlayerId9 = "";
+            PlayerName9 = "";
+            TotalPoints9 = "";
+            alert("Too many players selected from")
+        }
+        else {
+            var player9 = { "Id": id, "PlayerName9": playerName9, "PlayerStatId9": playerId9, "TotalPoints9": totalPoints9 };
+            $.ajax({
+                type: "PUT",
+                data: JSON.stringify(player9),
+                url: fullurl,
+                contentType: "application/json",
+            });
+            $('#removePlayer9').show();
+            Reload();
+        }
+    }
+
+    function validateTenthTeam(teamSelected1, playerId1,
+                teamSelected2, playerId2,
+                teamSelected3, playerId3,
+                teamSelected4, playerId4,
+                teamSelected5, playerId5,
+                teamSelected6, playerId6,
+                teamSelected7, playerId7,
+                teamSelected8, playerId8,
+                teamSelected9, playerId9,
+                teamSelected10, playerName10, playerId10, totalPoints10) {
+        //alert(TeamSelected1 + PlayerId1 + TeamSelected2 + PlayerName2 + PlayerId2 + TotalPoints2);
+        var root = "https://localhost:44324/api/ManageTeams/";
+        var url = window.location.href;
+        var id = url.substring(url.lastIndexOf('/') + 1);
+        var fullurl = root.concat(id);
+        var team1 = teamSelected1;
+        var team2 = teamSelected2;
+        var team3 = teamSelected3;
+        var team4 = teamSelected4;
+        var team5 = teamSelected5;
+        var team6 = teamSelected6;
+        var team7 = teamSelected7;
+        var team8 = teamSelected8;
+        var team9 = teamSelected9;
+        var team10 = teamSelected10;
+             var teams = [team1, team2,team3, team4,team5, team6,team7, team8,team9];
+        var t = teams.includes(team10);
+
+        var player1 = playerId1;
+        var player2 = playerId2;
+        var player3 = playerId3;
+        var player4 = playerId4;
+        var player5 = playerId5;
+        var player6 = playerId6;
+        var player7 = playerId7;
+        var player8 = playerId8;
+        var player9 = playerId9;
+        var player10 = playerId10;
+             var players = [player1, player2,player3, player4,player5, player6,player7, player8,player9];
+        var p = players.includes(player10);
+
+        if (p == true) {
+            TeamSelected10 = "";
+            PlayerId10 = "";
+            PlayerName10 = "";
+            TotalPoints10 = "";
+            alert("Player Selected Already")
+        }
+
+        else if (t == true) {
+            TeamSelected10 = "";
+            PlayerId10 = "";
+            PlayerName10 = "";
+            TotalPoints10 = "";
+            alert("Too many players selected from")
+        }
+        else {
+            var player10 = { "Id": id, "PlayerName10": playerName10, "PlayerStatId10": playerId10, "TotalPoints10": totalPoints10 };
+            $.ajax({
+                type: "PUT",
+                data: JSON.stringify(player10),
+                url: fullurl,
+                contentType: "application/json",
+            });
+            $('#removePlayer10').show();
+        Reload();
+        }
+        
+    }
+
+    function validateEleventhTeam(teamSelected1, playerId1,
+                teamSelected2, playerId2,
+                teamSelected3, playerId3,
+                teamSelected4, playerId4,
+                teamSelected5, playerId5,
+                teamSelected6, playerId6,
+                teamSelected7, playerId7,
+                teamSelected8, playerId8,
+                teamSelected9, playerId9,
+                teamSelected10, playerId10,
+                teamSelected11, playerName11, playerId11, totalPoints11) {
+        //alert(TeamSelected1 + PlayerId1 + TeamSelected2 + PlayerName2 + PlayerId2 + TotalPoints2);
+        var root = "https://localhost:44324/api/ManageTeams/";
+        var url = window.location.href;
+        var id = url.substring(url.lastIndexOf('/') + 1);
+        var fullurl = root.concat(id);
+        var team1 = teamSelected1;
+        var team2 = teamSelected2;
+        var team3 = teamSelected3;
+        var team4 = teamSelected4;
+        var team5 = teamSelected5;
+        var team6 = teamSelected6;
+        var team7 = teamSelected7;
+        var team8 = teamSelected8;
+        var team9 = teamSelected9;
+        var team10 = teamSelected10;
+        var team11 = teamSelected11;
+             var teams = [team1, team2,team3, team4,team5, team6,team7, team8,team9, team10];
+        var t = teams.includes(team11);
+
+        var player1 = playerId1;
+        var player2 = playerId2;
+        var player3 = playerId3;
+        var player4 = playerId4;
+        var player5 = playerId5;
+        var player6 = playerId6;
+        var player7 = playerId7;
+        var player8 = playerId8;
+        var player9 = playerId9;
+        var player10 = playerId10;
+        var player11 = playerId11;
+             var players = [player1, player2,player3, player4,player5, player6,player7, player8,player9, player10];
+        var p = players.includes(player11);
+
+        if (p == true) {
+            TeamSelected11 = "";
+            PlayerId11 = "";
+            PlayerName11 = "";
+            TotalPoints11 = "";
+            alert("Player Selected Already")
+        }
+
+        else if (t == true) {
+            TeamSelected11 = "";
+            PlayerId11 = "";
+            PlayerName11 = "";
+            TotalPoints11 = "";
+            alert("Too many players selected from")
+        }
+        else {
+            var player11 = { "Id": id, "PlayerName11": playerName11, "PlayerStatId11": playerId11, "TotalPoints11": totalPoints11 };
+            $.ajax({
+                type: "PUT",
+                data: JSON.stringify(player11),
+                url: fullurl,
+                contentType: "application/json",
+            });
+            $('#removePlayer11').show();
+            Reload();
+        }
+        
+        
+    }
+
+    function validateTwelvethTeam(teamSelected1, playerId1,
+                teamSelected2, playerId2,
+                teamSelected3, playerId3,
+                teamSelected4, playerId4,
+                teamSelected5, playerId5,
+                teamSelected6, playerId6,
+                teamSelected7, playerId7,
+                teamSelected8, playerId8,
+                teamSelected9, playerId9,
+                teamSelected10, playerId10,
+                teamSelected11, playerId11,
+                teamSelected12, playerName12, playerId12, totalPoints12) {
+        //alert(TeamSelected1 + PlayerId1 + TeamSelected2 + PlayerName2 + PlayerId2 + TotalPoints2);
+        var root = "https://localhost:44324/api/ManageTeams/";
+        var url = window.location.href;
+        var id = url.substring(url.lastIndexOf('/') + 1);
+        var fullurl = root.concat(id);
+        var team1 = teamSelected1;
+        var team2 = teamSelected2;
+        var team3 = teamSelected3;
+        var team4 = teamSelected4;
+        var team5 = teamSelected5;
+        var team6 = teamSelected6;
+        var team7 = teamSelected7;
+        var team8 = teamSelected8;
+        var team9 = teamSelected9;
+        var team10 = teamSelected10;
+        var team11 = teamSelected11;
+        var team12 = teamSelected12;
+             var teams = [team1, team2,team3, team4,team5, team6,team7, team8,team9, team10,team11];
+        var t = teams.includes(team12);
+
+        var player1 = playerId1;
+        var player2 = playerId2;
+        var player3 = playerId3;
+        var player4 = playerId4;
+        var player5 = playerId5;
+        var player6 = playerId6;
+        var player7 = playerId7;
+        var player8 = playerId8;
+        var player9 = playerId9;
+        var player10 = playerId10;
+        var player11 = playerId11;
+        var player12 = playerId12;
+             var players = [player1, player2,player3, player4,player5, player6,player7, player8,player9, player10,player11];
+        var p = players.includes(player12);
+        if (p == true) {
+            TeamSelected12 = "";
+            PlayerId12 = "";
+            PlayerName12 = "";
+            TotalPoints12 = "";
+            alert("Player Selected Already")
+        }
+
+        else if (t == true) {
+            TeamSelected12 = "";
+            PlayerId12 = "";
+            PlayerName12 = "";
+            TotalPoints12 = "";
+            alert("Too many players selected from")
+        }
+        else {
+            var player12 = { "Id": id, "PlayerName12": playerName12, "PlayerStatId12": playerId12, "TotalPoints12": totalPoints12 };
+            $.ajax({
+                type: "PUT",
+                data: JSON.stringify(player12),
+                url: fullurl,
+                contentType: "application/json",
+            });
+            $('#removePlayer12').show();
+            Reload();
+        }
+        
+        
+    }
+
+    function validateThirteenthTeam(teamSelected1, playerId1,
+                teamSelected2, playerId2,
+                teamSelected3, playerId3,
+                teamSelected4, playerId4,
+                teamSelected5, playerId5,
+                teamSelected6, playerId6,
+                teamSelected7, playerId7,
+                teamSelected8, playerId8,
+                teamSelected9, playerId9,
+                teamSelected10, playerId10,
+                teamSelected11, playerId11,
+                teamSelected12, playerId12,
+                teamSelected13, playerName13, playerId13, totalPoints13) {
+        //alert(TeamSelected1 + PlayerId1 + TeamSelected2 + PlayerName2 + PlayerId2 + TotalPoints2);
+        var root = "https://localhost:44324/api/ManageTeams/";
+        var url = window.location.href;
+        var id = url.substring(url.lastIndexOf('/') + 1);
+        var fullurl = root.concat(id);
+        var team1 = teamSelected1;
+        var team2 = teamSelected2;
+        var team3 = teamSelected3;
+        var team4 = teamSelected4;
+        var team5 = teamSelected5;
+        var team6 = teamSelected6;
+        var team7 = teamSelected7;
+        var team8 = teamSelected8;
+        var team9 = teamSelected9;
+        var team10 = teamSelected10;
+        var team11 = teamSelected11;
+        var team12 = teamSelected12;
+        var team13 = teamSelected13;
+             var teams = [team1, team2,team3, team4,team5, team6,team7, team8,team9, team10,team11, team12];
+        var t = teams.includes(team13);
+
+        var player1 = playerId1;
+        var player2 = playerId2;
+        var player3 = playerId3;
+        var player4 = playerId4;
+        var player5 = playerId5;
+        var player6 = playerId6;
+        var player7 = playerId7;
+        var player8 = playerId8;
+        var player9 = playerId9;
+        var player10 = playerId10;
+        var player11 = playerId11;
+        var player12 = playerId12;
+        var player13 = playerId13;
+             var players = [player1, player2,player3, player4,player5, player6,player7, player8,player9, player10,player11, player12];
+        var p = players.includes(player13);
+        if (p == true) {
+            TeamSelected13 = "";
+            PlayerId13 = "";
+            PlayerName13 = "";
+            TotalPoints13 = "";
+            alert("Player Selected Already")
+        }
+
+        else if (t == true) {
+            TeamSelected13 = "";
+            PlayerId13 = "";
+            PlayerName13 = "";
+            TotalPoints13 = "";
+            alert("Too many players selected from")
+        }
+        else {
+            var player13 = { "Id": id, "PlayerName13": playerName13, "PlayerStatId13": playerId13, "TotalPoints13": totalPoints13 };
+            $.ajax({
+                type: "PUT",
+                data: JSON.stringify(player13),
+                url: fullurl,
+                contentType: "application/json",
+            });
+            $('#removePlayer13').show();
+            Reload();
+        }
+        
+        
+    }
+
+    function validateFourteenthTeam(teamSelected1, playerId1,
+                teamSelected2, playerId2,
+                teamSelected3, playerId3,
+                teamSelected4, playerId4,
+                teamSelected5, playerId5,
+                teamSelected6, playerId6,
+                teamSelected7, playerId7,
+                teamSelected8, playerId8,
+                teamSelected9, playerId9,
+                teamSelected10, playerId10,
+                teamSelected11, playerId11,
+                teamSelected12, playerId12,
+                teamSelected13, playerId13,
+                teamSelected14, playerName14, playerId14, totalPoints14) {
+        //alert(TeamSelected1 + PlayerId1 + TeamSelected2 + PlayerName2 + PlayerId2 + TotalPoints2);
+        var root = "https://localhost:44324/api/ManageTeams/";
+        var url = window.location.href;
+        var id = url.substring(url.lastIndexOf('/') + 1);
+        var fullurl = root.concat(id);
+        var team1 = teamSelected1;
+        var team2 = teamSelected2;
+        var team3 = teamSelected3;
+        var team4 = teamSelected4;
+        var team5 = teamSelected5;
+        var team6 = teamSelected6;
+        var team7 = teamSelected7;
+        var team8 = teamSelected8;
+        var team9 = teamSelected9;
+        var team10 = teamSelected10;
+        var team11 = teamSelected11;
+        var team12 = teamSelected12;
+        var team13 = teamSelected13;
+        var team14 = teamSelected14;
+             var teams = [team1, team2,team3, team4,team5, team6,team7, team8,team9, team10,team11, team12,team13];
+        var t = teams.includes(team14);
+
+        var player1 = playerId1;
+        var player2 = playerId2;
+        var player3 = playerId3;
+        var player4 = playerId4;
+        var player5 = playerId5;
+        var player6 = playerId6;
+        var player7 = playerId7;
+        var player8 = playerId8;
+        var player9 = playerId9;
+        var player10 = playerId10;
+        var player11 = playerId11;
+        var player12 = playerId12;
+        var player13 = playerId13;
+        var player14 = playerId14;
+             var players = [player1, player2,player3, player4,player5, player6,player7, player8,player9, player10,player11, player12,player13];
+        var p = players.includes(player14);
+        if (p == true) {
+            TeamSelected14 = "";
+            PlayerId14 = "";
+            PlayerName14 = "";
+            TotalPoints14 = "";
+            alert("Player Selected Already")
+        }
+
+        else if (t == true) {
+            TeamSelected14 = "";
+            PlayerId14 = "";
+            PlayerName14 = "";
+            TotalPoints14 = "";
+            alert("Too many players selected from")
+        }
+        else {
+            var player14 = { "Id": id, "PlayerName14": playerName14, "PlayerStatId14": playerId14, "TotalPoints14": totalPoints14 };
+            $.ajax({
+                type: "PUT",
+                data: JSON.stringify(player14),
+                url: fullurl,
+                contentType: "application/json",
+            });
+            $('#removePlayer14').show();
+            Reload();
+        }
+        
+        
+    }
+
+    function validateFifteenthTeam(teamSelected1, playerId1,
+                teamSelected2, playerId2,
+                teamSelected3, playerId3,
+                teamSelected4, playerId4,
+                teamSelected5, playerId5,
+                teamSelected6, playerId6,
+                teamSelected7, playerId7,
+                teamSelected8, playerId8,
+                teamSelected9, playerId9,
+                teamSelected10, playerId10,
+                teamSelected11, playerId11,
+                teamSelected12, playerId12,
+                teamSelected13, playerId13,
+                teamSelected14, playerId14,
+                teamSelected15, playerName15, playerId15, totalPoints15) {
+        //alert(TeamSelected1 + PlayerId1 + TeamSelected2 + PlayerName2 + PlayerId2 + TotalPoints2);
+        var root = "https://localhost:44324/api/ManageTeams/";
+        var url = window.location.href;
+        var id = url.substring(url.lastIndexOf('/') + 1);
+        var fullurl = root.concat(id);
+        var team1 = teamSelected1;
+        var team2 = teamSelected2;
+        var team3 = teamSelected3;
+        var team4 = teamSelected4;
+        var team5 = teamSelected5;
+        var team6 = teamSelected6;
+        var team7 = teamSelected7;
+        var team8 = teamSelected8;
+        var team9 = teamSelected9;
+        var team10 = teamSelected10;
+        var team11 = teamSelected11;
+        var team12 = teamSelected12;
+        var team13 = teamSelected13;
+        var team14 = teamSelected14;
+        var team15 = teamSelected15;
+             var teams = [team1, team2,team3, team4,team5, team6,team7, team8,team9, team10,team11, team12,team13, team14];
+        var t = teams.includes(team15);
+
+        var player1 = playerId1;
+        var player2 = playerId2;
+        var player3 = playerId3;
+        var player4 = playerId4;
+        var player5 = playerId5;
+        var player6 = playerId6;
+        var player7 = playerId7;
+        var player8 = playerId8;
+        var player9 = playerId9;
+        var player10 = playerId10;
+        var player11 = playerId11;
+        var player12 = playerId12;
+        var player13 = playerId13;
+        var player14 = playerId14;
+        var player15 = playerId15;
+             var players = [player1, player2,player3, player4,player5, player6,player7, player8,player9, player10,player11, player12,player13, player14];
+        var p = players.includes(player15);
+        if (p == true) {
+            TeamSelected15 = "";
+            PlayerId15 = "";
+            PlayerName15 = "";
+            TotalPoints15 = "";
+            alert("Player Selected Already")
+        }
+
+        else if (t == true) {
+            TeamSelected15 = "";
+            PlayerId15 = "";
+            PlayerName15 = "";
+            TotalPoints15 = "";
+            alert("Too many players selected from")
+        }
+        else {
+            var player15 = { "Id": id, "PlayerName15": playerName15, "PlayerStatId15": playerId15, "TotalPoints15": totalPoints15 };
+            $.ajax({
+                type: "PUT",
+                data: JSON.stringify(player15),
+                url: fullurl,
+                contentType: "application/json",
+            });
+            $('#removePlayer15').show();
+            Reload();
+        }
+        
+        
+    }
+    function Reload() {
+        setTimeout(function(){ var url = window.location.href;
+        var id = url.substring(url.lastIndexOf('/') + 1);
+        
+        var controller = '/ManageTeams/SelectedTeamPartialView/';
+        var controllerId = controller.concat(id);
+        $('#pv').html(controllerId);
+        $('#pv').load(controllerId); }, 500);
+        
+    }
+
+</script>

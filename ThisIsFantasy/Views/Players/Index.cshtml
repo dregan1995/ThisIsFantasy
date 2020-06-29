@@ -1,0 +1,248 @@
+﻿@model ThisIsFantasy.ViewModels.PlayerClubViewModel
+
+@{
+    ViewBag.Title = "Index";
+}
+<br />
+@Html.DropDownList("drop1", ViewBag.data1 as IEnumerable<SelectListItem>, new { @class = "form-control" })
+@foreach (var team in Model.Teams)
+            {
+
+
+                int number = 0;
+                number = number + 1;
+                string rowId = String.Format("sour{0}", number);
+                if (!Model.Teams.Any())
+                {
+
+
+        <p>We don't have any teams yet.</p>
+                }
+                else
+                {
+        <div id=@team.Id>
+            <h2 class="h2" onclick="ViewTable(@team.Id);">@team.Name</h2>
+            <table class="table table-bordered table-hover">
+                <thead>
+                    <tr>
+                        <th>Player Name</th>
+                        <th>Team Name</th>
+                        <th>Position</th>
+                        <th>Total Points</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var player in Model.Players)
+        {
+            if (player.TeamId == team.Id && player.Position != null)
+            {
+
+
+
+                    <tr>
+                        <td id="playerName">
+                            <input type="button" value="@player.Name" name="Name" class="playerName" />
+                        </td>
+                        <td>@team.Name</td>
+                        <td id="position">@player.Position</td>
+                        @foreach (var playerStat in Model.PlayerStats)
+                        {
+                            if (player.Id == playerStat.PlayerId)
+                            {
+                                <td>
+                                    @playerStat.TotalPoints
+                                </td>
+                            }
+                        }
+                    </tr>
+                    }
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+}
+
+
+@*@foreach (var player in Model.Players)
+    {
+        if (player.Position == "Attacker" )
+        {
+            <tr>
+                <td>@player.Name</td>
+                <td>@player.TeamName</td>
+                <td>@player.Position</td>
+                @foreach (var playerStat in Model.PlayerStats)
+                {
+                    if (player.Id == playerStat.PlayerId)
+                    {
+                        <td>
+                            @playerStat.TotalPoints
+                        </td>
+                    }
+                }
+            </tr>
+        }
+    }*@
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+<script type="text/javascript" src="http://ajax.cdnjs.com/ajax/libs/json2/20110223/json2.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<script type="text/javascript">
+
+    $(document).ready(function () {
+        //$('table').hide();
+        $('#62').hide();
+        $('#57').hide();
+        $('#58').hide();
+        $('#61').hide();
+        $('#64').hide();
+        $('#65').hide();
+        $('#66').hide();
+        $('#67').hide();
+        $('#68').hide();
+        $('#73').hide();
+        $('#76').hide();
+        $('#328').hide();
+        $('#338').hide();
+        $('#340').hide();
+        $('#346').hide();
+        $('#354').hide();
+        $('#356').hide();
+        $('#397').hide();
+        $('#563').hide();
+        $('#1044').hide();
+        $("#drop1").change(function () {
+            var id = $('#drop1').val();
+            if ($('#62').is(":visible")) {
+                window.alert(id)
+                $('#62').hide();
+                $('#' + id).show();
+            }
+            if ($('#57').is(":visible")) {
+                $('#57').hide();
+                $('#' + id).show();
+            }
+            if ($('#58').is(":visible")) {
+                $('#58').hide();
+                $('#' + id).show();
+            }
+            if ($('#61').is(":visible")) {
+                $('#61').hide();
+                $('#' + id).show();
+            }
+            if ($('#64').is(":visible")) {
+                $('#64').hide();
+                $('#' + id).show();
+            }
+            if ($('#65').is(":visible")) {
+                $('#65').hide();
+                $('#' + id).show();
+            }
+            if ($('#66').is(":visible")) {
+                $('#66').hide();
+                $('#' + id).show();
+            }
+            if ($('#67').is(":visible")) {
+                $('#67').hide();
+                $('#' + id).show();
+            }
+            if ($('#68').is(":visible")) {
+                $('#68').hide();
+                $('#' + id).show();
+            }
+            if ($('#73').is(":visible")) {
+                $('#73').hide();
+                $('#' + id).show();
+            }
+            if ($('#76').is(":visible")) {
+                $('#76').hide();
+                $('#' + id).show();
+            }
+            if ($('#328').is(":visible")) {
+                $('#328').hide();
+                $('#' + id).show();
+            }
+            if ($('#338').is(":visible")) {
+                $('#338').hide();
+                $('#' + id).show();
+            }
+            if ($('#340').is(":visible")) {
+                $('#340').hide();
+                $('#' + id).show();
+            }
+            if ($('#346').is(":visible")) {
+                $('#346').hide();
+                $('#' + id).show();
+            }
+            if ($('#354').is(":visible")) {
+                $('#354').hide();
+                $('#' + id).show();
+            }
+            if ($('#356').is(":visible")) {
+                $('#356').hide();
+                $('#' + id).show();
+            }
+            if ($('#397').is(":visible")) {
+                $('#397').hide();
+                $('#' + id).show();
+            }
+            if ($('#563').is(":visible")) {
+                $('#563').hide();
+                $('#' + id).show();
+            }
+            if ($('#1044').is(":visible")) {
+                $('#1044').hide();
+                $('#' + id).show();
+            }
+            $('#' + id).show();
+        });
+    });
+
+    //function ViewTable(id) {
+    //    if ($('#' + id).is(":visible")) {
+    //        $('#' + id).hide();
+    //    } else {
+    //        $('#' + id).show();
+    //    }
+
+    //    function HideTable(id) {
+    //            $('#' + id).hide();
+    //        }
+
+    //}
+
+    $("body").on("click", "#btnAdd", function () {
+        //Reference the Name and Country TextBoxes.
+
+        //var txtName = $("#name");
+         var txtCountry = $(this).data("position");
+
+        var textvalue = $(this).closest('tr').find('td').eq(0).find('input[type=text]').val();
+        window.alert(txtCountry);
+        //Get the reference of the Table's TBODY element.
+        //var tBody = $("#tblCustomers > TBODY")[0];
+
+        ////Add Row.
+        //var row = tBody.insertRow(-1);
+
+        ////Add Name cell.
+        //var cell = $(row.insertCell(-1));
+        //cell.html(txtName.val());
+
+        ////Add Country cell.
+        //cell = $(row.insertCell(-1));
+        //cell.html(txtCountry.val());
+
+        ////Add Button cell.
+        //cell = $(row.insertCell(-1));
+        //var btnRemove = $("<input />");
+        //btnRemove.attr("type", "button");
+        //btnRemove.attr("onclick", "Remove(this);");
+        //btnRemove.val("Remove");
+        //cell.append(btnRemove);
+
+        ////Clear the TextBoxes.
+        //txtName.val("");
+        //txtCountry.val("");
+    });
+</script>

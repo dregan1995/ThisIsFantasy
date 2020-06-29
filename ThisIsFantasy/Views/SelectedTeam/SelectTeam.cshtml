@@ -1,0 +1,842 @@
+﻿@model ThisIsFantasy.ViewModels.PlayerClubViewModel
+
+@{
+    ViewBag.Title = "Index";
+}
+<div class="col-md-4 sidebyside">
+    <br />
+    @Html.DropDownList("drop1", ViewBag.data1 as IEnumerable<SelectListItem>, new { @class = "form-control" })
+
+    @foreach (var team in Model.Teams)
+    {
+
+
+        int number = 0;
+        number = number + 1;
+        string rowId = String.Format("sour{0}", number);
+        if (!Model.Teams.Any())
+        {
+
+
+            <p>We don't have any teams yet.</p>
+        }
+        else
+        {
+            <div id=@team.Id>
+                <h2 class="h2" onclick="ViewTable(@team.Id);">@team.Name</h2>
+                <table class="table table-bordered table-hover">
+                    <thead>
+                        <tr>
+                            <th hidden="hidden">Id</th>
+                            <th hidden="hidden">Team ID</th>
+                            <th>Player Name</th>
+                            <th hidden="hidden">Team Name</th>
+                            <th>Position</th>
+                            <th>Total Points</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var player in Model.Players)
+                        {
+                            if (player.TeamId == team.Id && player.Position != null)
+                            {
+
+
+
+                        <tr>
+                            <td hidden="hidden">
+                                <label id="PlayerId">@player.Id</label>
+                            </td>
+                            <td hidden="hidden">
+                                <label id="TeamId">@player.TeamId</label>
+                            </td>
+                            <td id="playerName">
+                                <input type="button" value="@player.Name" name="Name" class="playerName" />
+                            </td>
+                            <td hidden="hidden">
+                                <label id="TeamName">@team.Name</label>
+                            </td>
+                            <td>
+                                <label id="Position">@player.Position</label>
+                            </td>
+                            @foreach (var playerStat in Model.PlayerStats)
+                            {
+                                if (player.Id == playerStat.PlayerId)
+                                {
+                                    <td>
+                                        @*<input type="text" value="@playerStat.TotalPoints" name="TotalPoints" contenteditable="false" />*@
+                                        <label id="TotalPoints">@playerStat.TotalPoints</label>
+                                    </td>
+                                }
+                            }
+                        </tr>
+                            }
+                        }
+                    </tbody>
+                </table>
+            </div>
+
+        }
+    }
+</div>
+<div class="sidebyside col-md-4">
+    <h4>Team Name</h4>
+    <hr />
+    <label>Goalkeeper 1</label><label id="goalkeeper1"></label><button id="removeGoalkeeper1" class="linkStyle" onclick="RemovePlayer1()">X</button>
+    <br />
+    <label>Goalkeeper 2</label><label id="goalkeeper2"></label><button id="removeGoalkeeper2" class="linkStyle" onclick="RemovePlayer2()">X</button>
+    <br />
+    <label>Defender 1</label><label id="defender1"></label><button id="removeDefender1" class="linkStyle" onclick="RemovePlayer3()">X</button>
+    <br />
+    <label>Defender 2</label><label id="defender2"></label><button id="removeDefender2" class="linkStyle" onclick="RemovePlayer4()">X</button>
+    <br />
+    <label>Defender 3</label><label id="defender3"></label><button id="removeDefender3" class="linkStyle" onclick="RemovePlayer5()">X</button>
+    <br />
+    <label>Defender 4</label><label id="defender4"></label><button id="removeDefender4" class="linkStyle" onclick="RemovePlayer6()">X</button>
+    <br />
+    <label>Defender 5</label><label id="defender5"></label><button id="removeDefender5" class="linkStyle" onclick="RemovePlayer7()">X</button>
+    <br />
+    <label>Midfielder 1</label><label id="midfielder1"></label><button id="removeMidfielder1" class="linkStyle" onclick="RemovePlayer8()">X</button>
+    <br />
+    <label>Midfielder 2</label><label id="midfielder2"></label><button id="removeMidfielder2" class="linkStyle" onclick="RemovePlayer9()">X</button>
+    <br />
+    <label>Midfielder 3</label><label id="midfielder3"></label><button id="removeMidfielder3" class="linkStyle" onclick="RemovePlayer10()">X</button>
+    <br />
+    <label>Midfielder 4</label><label id="midfielder4"></label><button id="removeMidfielder4" class="linkStyle" onclick="RemovePlayer11()">X</button>
+    <br />
+    <label>Midfielder 5</label><label id="midfielder5"></label><button id="removeMidfielder5" class="linkStyle" onclick="RemovePlayer12()">X</button>
+    <br />
+    <label>Attacker 1</label><label id="attacker1"></label><button id="removeAttacker1" class="linkStyle" onclick="RemovePlayer13()">X</button>
+    <br />
+    <label>Attacker 2</label><label id="attacker2"></label><button id="removeAttacker2" class="linkStyle" onclick="RemovePlayer14()">X</button>
+    <br />
+    <label>Attacker 3</label><label id="attacker3"></label><button id="removeAttacker3" class="linkStyle" onclick="RemovePlayer15()">X</button>
+    <br />
+    <button id="submitTeam" value="Submit" onclick="SubmitSelectedPlayers()" class="btn btn-success">Confirm</button>
+</div>
+
+
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+<script type="text/javascript" src="http://ajax.cdnjs.com/ajax/libs/json2/20110223/json2.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<script type="text/javascript">
+    var root = "https://localhost:44324/api/SelectedTeam/";
+    var arr = new Array(149);
+    var selectedTeam = new Array(75);
+    var url = window.location.href;
+    var id = url.substring(url.lastIndexOf('/') + 1);
+    var n = id.indexOf("?");
+    var ex = id.substring(0, n);
+    var id2 = url.substring(url.lastIndexOf('=') + 1);
+    var fullurl = root.concat(ex);
+    var controller = '/ManageTeams/SelectedTeamPartialView/';
+    var controllerId = controller.concat(ex);
+    var firstPlayerRemoved = 0;
+    var secondPlayerRemoved = 0;
+    var thirdPlayerRemoved = 0;
+    var fourthPlayerRemoved = 0;
+    var fifthPlayerRemoved = 0;
+    var sixthPlayerRemoved = 0;
+    var seventhPlayerRemoved = 0;
+    var eighthPlayerRemoved = 0;
+    var ninthPlayerRemoved = 0;
+    var tenthPlayerRemoved = 0;
+    var eleventhPlayerRemoved = 0;
+    var twelfthPlayerRemoved = 0;
+    var thirteenthPlayerRemoved = 0;
+    var fourteenthPlayerRemoved = 0;
+    var fifteenthPlayerRemoved = 0;
+    var playerCounter = 0;
+    var number = 0;
+    var showRemove = 0;
+    var goalkeepers = 0;
+    var defenders = 0;
+    var midfielders = 0;
+    var attackers = 0;
+
+    $(document).ready(function () {
+
+        var counter = 0;
+        $.ajax({
+            url: "https://localhost:44324/api/ManageTeams/4",
+            type: "Get",
+            success: function (data) {
+                for (var i = 0; i < data.length; i++) {
+                    arr[counter] = (data[i].PlayerStatId1);
+                    counter = counter + 1;
+                    arr[counter] = (data[i].PlayerStatId2);
+                    counter = counter + 1;
+                    arr[counter] = (data[i].PlayerStatId3);
+                    counter = counter + 1;
+                    arr[counter] = (data[i].PlayerStatId4);
+                    counter = counter + 1;
+                    arr[counter] = (data[i].PlayerStatId5);
+                    counter = counter + 1;
+                    arr[counter] = (data[i].PlayerStatId6);
+                    counter = counter + 1;
+                    arr[counter] = (data[i].PlayerStatId7);
+                    counter = counter + 1;
+                    arr[counter] = (data[i].PlayerStatId8);
+                    counter = counter + 1;
+                    arr[counter] = (data[i].PlayerStatId9);
+                    counter = counter + 1;
+                    arr[counter] = (data[i].PlayerStatId10);
+                    counter = counter + 1;
+                    arr[counter] = (data[i].PlayerStatId11);
+                    counter = counter + 1;
+                    arr[counter] = (data[i].PlayerStatId12);
+                    counter = counter + 1;
+                    arr[counter] = (data[i].PlayerStatId13);
+                    counter = counter + 1;
+                    arr[counter] = (data[i].PlayerStatId14);
+                    counter = counter + 1;
+                    arr[counter] = (data[i].PlayerStatId15);
+                    counter = counter + 1;
+                }
+            }
+        });
+
+        $('#removeGoalkeeper1').hide();
+        $('#removeGoalkeeper2').hide();
+        $('#removeDefender1').hide();
+        $('#removeDefender2').hide(); $('#removeDefender3').hide(); $('#removeDefender4').hide();
+        $('#removeDefender5').hide();
+        $('#removeMidfielder1').hide();
+        $('#removeMidfielder2').hide();
+        $('#removeMidfielder3').hide();
+        $('#removeMidfielder4').hide();
+        $('#removeMidfielder5').hide();
+        $('#removeAttacker1').hide();
+        $('#removeAttacker2').hide();
+        $('#removeAttacker3').hide();
+        $('#62').hide();
+        $('#57').hide();
+        $('#58').hide();
+        $('#61').hide();
+        $('#64').hide();
+        $('#65').hide();
+        $('#66').hide();
+        $('#67').hide();
+        $('#68').hide();
+        $('#73').hide();
+        $('#76').hide();
+        $('#328').hide();
+        $('#338').hide();
+        $('#340').hide();
+        $('#346').hide();
+        $('#354').hide();
+        $('#356').hide();
+        $('#397').hide();
+        $('#563').hide();
+        $('#1044').hide();
+        $("#drop1").change(function () {
+            var id = $('#drop1').val();
+            if ($('#62').is(":visible")) {
+                $('#62').hide();
+                $('#' + id).show();
+            }
+            if ($('#57').is(":visible")) {
+                $('#57').hide();
+                $('#' + id).show();
+            }
+            if ($('#58').is(":visible")) {
+                $('#58').hide();
+                $('#' + id).show();
+            }
+            if ($('#61').is(":visible")) {
+                $('#61').hide();
+                $('#' + id).show();
+            }
+            if ($('#64').is(":visible")) {
+                $('#64').hide();
+                $('#' + id).show();
+            }
+            if ($('#65').is(":visible")) {
+                $('#65').hide();
+                $('#' + id).show();
+            }
+            if ($('#66').is(":visible")) {
+                $('#66').hide();
+                $('#' + id).show();
+            }
+            if ($('#67').is(":visible")) {
+                $('#67').hide();
+                $('#' + id).show();
+            }
+            if ($('#68').is(":visible")) {
+                $('#68').hide();
+                $('#' + id).show();
+            }
+            if ($('#73').is(":visible")) {
+                $('#73').hide();
+                $('#' + id).show();
+            }
+            if ($('#76').is(":visible")) {
+                $('#76').hide();
+                $('#' + id).show();
+            }
+            if ($('#328').is(":visible")) {
+                $('#328').hide();
+                $('#' + id).show();
+            }
+            if ($('#338').is(":visible")) {
+                $('#338').hide();
+                $('#' + id).show();
+            }
+            if ($('#340').is(":visible")) {
+                $('#340').hide();
+                $('#' + id).show();
+            }
+            if ($('#346').is(":visible")) {
+                $('#346').hide();
+                $('#' + id).show();
+            }
+            if ($('#354').is(":visible")) {
+                $('#354').hide();
+                $('#' + id).show();
+            }
+            if ($('#356').is(":visible")) {
+                $('#356').hide();
+                $('#' + id).show();
+            }
+            if ($('#397').is(":visible")) {
+                $('#397').hide();
+                $('#' + id).show();
+            }
+            if ($('#563').is(":visible")) {
+                $('#563').hide();
+                $('#' + id).show();
+            }
+            if ($('#1044').is(":visible")) {
+                $('#1044').hide();
+                $('#' + id).show();
+            }
+            $('#' + id).show();
+        });
+    });
+
+    $(".playerName").click(function () {
+        var tr = $(this).closest('tr');
+        var TeamName = tr.find('label[id = "TeamName"]').text();
+        var TeamSelectedId = tr.find('label[id = "TeamId"]').text();
+        var PlayerName = tr.find('input[name="Name"]').val();
+        var PlayerId = tr.find('label[id="PlayerId"]').text();
+        var TotalPoints = tr.find('label[id="TotalPoints"]').text();
+        var Position = tr.find('label[id="Position"]').text();
+        var pid = arr.includes(Number(PlayerId));
+        var ts = selectedTeam.includes(TeamSelectedId);
+        var pid2 = arr.includes(Number(PlayerId));
+
+        if (pid == true) {
+            alert(PlayerName + ' already selected by another user');
+        }
+
+        else if (ts == true) {
+            alert('You have already selected a player from ' + TeamName);
+        }
+        else if (pid2 == true) {
+            alert('You have already selected player: ' + PlayerName);
+        }
+        else {
+            if (playerCounter == 60) {
+                alert("You have enough players selected")
+            }
+            else {
+                if (firstPlayerRemoved == 1 && Position == "Goalkeeper") {
+                    selectedTeam[0] = PlayerName;
+                    selectedTeam[1] = PlayerId;
+                    selectedTeam[2] = TotalPoints;
+                    selectedTeam[3] = TeamSelectedId;
+                    selectedTeam[4] = Position;
+                    $('#goalkeeper1').append(PlayerName);
+                    $('#removeGoalkeeper1').show();
+                    firstPlayerRemoved = firstPlayerRemoved - 1;
+                }
+                else if (secondPlayerRemoved == 1&& Position == "Goalkeeper") {
+                    selectedTeam[5] = PlayerName;
+                    selectedTeam[6] = PlayerId;
+                    selectedTeam[7] = TotalPoints;
+                    selectedTeam[8] = TeamSelectedId;
+                    selectedTeam[9] = Position;
+                    secondPlayerRemoved = secondPlayerRemoved - 1;
+                    $('#goalkeeper2').append(PlayerName);
+                        $('#removeGoalkeeper2').show();
+                }
+                else if (thirdPlayerRemoved == 1&& Position == "Defender") {
+                    selectedTeam[10] = PlayerName;
+                    selectedTeam[11] = PlayerId;
+                    selectedTeam[12] = TotalPoints;
+                    selectedTeam[13] = TeamSelectedId;
+                    selectedTeam[14] = Position;
+                    thirdPlayerRemoved = thirdPlayerRemoved - 1;
+                    $('#defender1').append(PlayerName);
+                        $('#removeDefender1').show();
+                }
+                else if (fourthPlayerRemoved == 1&& Position == "Defender") {
+                    selectedTeam[15] = PlayerName;
+                    selectedTeam[16] = PlayerId;
+                    selectedTeam[17] = TotalPoints;
+                    selectedTeam[18] = TeamSelectedId;
+                    selectedTeam[19] = Position;
+                    fourthPlayerRemoved = fourthPlayerRemoved - 1;
+                    $('#defender2').append(PlayerName);
+                        $('#removeDefender2').show();
+                }
+                else if (fifthPlayerRemoved == 1&& Position == "Defender") {
+                    selectedTeam[20] = PlayerName;
+                    selectedTeam[21] = PlayerId;
+                    selectedTeam[22] = TotalPoints;
+                    selectedTeam[23] = TeamSelectedId;
+                    selectedTeam[24] = Position;
+                    fifthPlayerRemoved = fifthPlayerRemoved - 1;
+                    $('#defender3').append(PlayerName);
+                        $('#removeDefender3').show();
+                }
+                else if (sixthPlayerRemoved == 1&& Position == "Defender") {
+                    selectedTeam[25] = PlayerName;
+                    selectedTeam[26] = PlayerId;
+                    selectedTeam[27] = TotalPoints;
+                    selectedTeam[28] = TeamSelectedId;
+                    selectedTeam[29] = Position;
+                    sixthPlayerRemoved = sixthPlayerRemoved - 1;
+                    $('#defender4').append(PlayerName);
+                        $('#removeDefender4').show();
+                }
+                else if (seventhPlayerRemoved == 1&& Position == "Defender") {
+                    selectedTeam[30] = PlayerName;
+                    selectedTeam[31] = PlayerId;
+                    selectedTeam[32] = TotalPoints;
+                    selectedTeam[33] = TeamSelectedId;
+                    selectedTeam[34] = Position;
+                    seventhPlayerRemoved = seventhPlayerRemoved - 1;
+                    $('#defender5').append(PlayerName);
+                        $('#removeDefender5').show();
+                }
+                else if (eighthPlayerRemoved == 1&& Position == "Midfielder") {
+                    selectedTeam[35] = PlayerName;
+                    selectedTeam[36] = PlayerId;
+                    selectedTeam[37] = TotalPoints;
+                    selectedTeam[38] = TeamSelectedId;
+                    selectedTeam[39] = Position;
+                    eighthPlayerRemoved = eighthPlayerRemoved - 1;
+                    $('#midfielder1').append(PlayerName);
+                        $('#removeMidfielder1').show();
+                }
+                else if (ninthPlayerRemoved == 1&& Position == "Midfielder") {
+                    selectedTeam[40] = PlayerName;
+                    selectedTeam[41] = PlayerId;
+                    selectedTeam[42] = TotalPoints;
+                    selectedTeam[43] = TeamSelectedId;
+                    selectedTeam[44] = Position;
+                    ninthPlayerRemoved = ninthPlayerRemoved - 1;
+                    $('#midfielder2').append(PlayerName);
+                        $('#removeMidfielder2').show();
+                }
+                else if (tenthPlayerRemoved == 1&& Position == "Midfielder") {
+                    selectedTeam[45] = PlayerName;
+                    selectedTeam[46] = PlayerId;
+                    selectedTeam[47] = TotalPoints;
+                    selectedTeam[48] = TeamSelectedId;
+                    selectedTeam[49] = Position;
+                    tenthPlayerRemoved = tenthPlayerRemoved - 1;
+                    $('#midfielder3').append(PlayerName);
+                        $('#removeMidfielder3').show();
+                }
+                else if (eleventhPlayerRemoved == 1&& Position == "Midfielder") {
+                    selectedTeam[50] = PlayerName;
+                    selectedTeam[51] = PlayerId;
+                    selectedTeam[52] = TotalPoints;
+                    selectedTeam[53] = TeamSelectedId;
+                    selectedTeam[54] = Position;
+                    eleventhPlayerRemoved = eleventhPlayerRemoved - 1;
+                    $('#midfielder4').append(PlayerName);
+                        $('#removeMidfielder4').show();
+                }
+                else if (twelfthPlayerRemoved == 1&& Position == "Midfielder") {
+                    selectedTeam[55] = PlayerName;
+                    selectedTeam[56] = PlayerId;
+                    selectedTeam[57] = TotalPoints;
+                    selectedTeam[58] = TeamSelectedId;
+                    selectedTeam[59] = Position;
+                    twelfthPlayerRemoved = twelfthPlayerRemoved - 1;
+                    $('#midfielder5').append(PlayerName);
+                        $('#removeMidfielder5').show();
+                }
+                else if (thirteenthPlayerRemoved == 1&& Position == "Attacker") {
+                    selectedTeam[60] = PlayerName;
+                    selectedTeam[61] = PlayerId;
+                    selectedTeam[62] = TotalPoints;
+                    selectedTeam[63] = TeamSelectedId;
+                    selectedTeam[64] = Position;
+                    thirteenthPlayerRemoved = thirteenthPlayerRemoved - 1;
+                    $('#attacker1').append(PlayerName);
+                        $('#removeAttacker1').show();
+                }
+                else if (fourteenthPlayerRemoved == 1&& Position == "Attacker") {
+                    selectedTeam[65] = PlayerName;
+                    selectedTeam[66] = PlayerId;
+                    selectedTeam[67] = TotalPoints;
+                    selectedTeam[68] = TeamSelectedId;
+                    selectedTeam[69] = Position;
+                    fourteenthPlayerRemoved = fourteenthPlayerRemoved - 1;
+                     $('#attacker2').append(PlayerName);
+                        $('#removeAttacker2').show();
+                }
+                else if (fifteenthPlayerRemoved == 1&& Position == "Attacker") {
+                    selectedTeam[70] = PlayerName;
+                    selectedTeam[71] = PlayerId;
+                    selectedTeam[72] = TotalPoints;
+                    selectedTeam[73] = TeamSelectedId;
+                    selectedTeam[74] = Position;
+                    fifteenthPlayerRemoved = fifteenthPlayerRemoved - 1;
+                     $('#attacker3').append(PlayerName);
+                        $('#removeAttacker3').show();
+                }
+                else {
+                    switch (Position) {
+                        case "Goalkeeper":
+                            goalkeepers = goalkeepers + 1;
+                            break;
+                        case "Defender":
+                            defenders = defenders + 1;
+                            break;
+                        case "Midfielder":
+                            midfielders = midfielders + 1;
+                            break;
+                        case "Attacker":
+                            attackers = attackers + 1;
+                    }
+                    if (Position == "Goalkeeper" && goalkeepers == 1) {
+                        selectedTeam[0] = PlayerName;
+                        selectedTeam[1] = PlayerId;
+                        selectedTeam[2] = TotalPoints;
+                        selectedTeam[3] = TeamSelectedId;
+                        selectedTeam[4] = Position;
+                        $('#goalkeeper1').append(PlayerName);
+                        $('#removeGoalkeeper1').show();
+                    }
+                    else if (Position == "Goalkeeper" && goalkeepers == 2) {
+                         selectedTeam[5] = PlayerName;
+                        selectedTeam[6] = PlayerId;
+                        selectedTeam[7] = TotalPoints;
+                        selectedTeam[8] = TeamSelectedId;
+                        selectedTeam[9] = Position;
+                        $('#goalkeeper2').append(PlayerName);
+                        $('#removeGoalkeeper2').show();
+       
+                    }
+                    else if (Position == "Defender" && defenders == 1) {
+                         selectedTeam[10] = PlayerName;
+                        selectedTeam[11] = PlayerId;
+                        selectedTeam[12] = TotalPoints;
+                        selectedTeam[13] = TeamSelectedId;
+                        selectedTeam[14] = Position;
+                        $('#defender1').append(PlayerName);
+                        $('#removeDefender1').show();
+                    }
+                    else if (Position == "Defender" && defenders == 2) {
+                         selectedTeam[15] = PlayerName;
+                        selectedTeam[16] = PlayerId;
+                        selectedTeam[17] = TotalPoints;
+                        selectedTeam[18] = TeamSelectedId;
+                        selectedTeam[19] = Position;
+                        $('#defender2').append(PlayerName);
+                        $('#removeDefender2').show();
+                    }
+                    else if (Position == "Defender" && defenders == 3) {
+                         selectedTeam[20] = PlayerName;
+                        selectedTeam[21] = PlayerId;
+                        selectedTeam[22] = TotalPoints;
+                        selectedTeam[23] = TeamSelectedId;
+                        selectedTeam[24] = Position;
+                        $('#defender3').append(PlayerName);
+                        $('#removeDefender3').show();
+                    }
+                    else if (Position == "Defender" && defenders == 4) {
+                         selectedTeam[25] = PlayerName;
+                        selectedTeam[26] = PlayerId;
+                        selectedTeam[27] = TotalPoints;
+                        selectedTeam[28] = TeamSelectedId;
+                        selectedTeam[29] = Position;
+                        $('#defender4').append(PlayerName);
+                        $('#removeDefender4').show();
+                    }
+                    else if (Position == "Defender" && defenders == 5) {
+                         selectedTeam[30] = PlayerName;
+                        selectedTeam[31] = PlayerId;
+                        selectedTeam[32] = TotalPoints;
+                        selectedTeam[33] = TeamSelectedId;
+                        selectedTeam[34] = Position;
+                        $('#defender5').append(PlayerName);
+                        $('#removeDefender5').show();
+                    }
+                    else if (Position == "Midfielder" && midfielders == 1) {
+                         selectedTeam[35] = PlayerName;
+                        selectedTeam[36] = PlayerId;
+                        selectedTeam[37] = TotalPoints;
+                        selectedTeam[38] = TeamSelectedId;
+                        selectedTeam[39] = Position;
+                        $('#midfielder1').append(PlayerName);
+                        $('#removeMidfielder1').show();
+                    }
+                    else if (Position == "Midfielder" && midfielders == 2) {
+                         selectedTeam[40] = PlayerName;
+                        selectedTeam[41] = PlayerId;
+                        selectedTeam[42] = TotalPoints;
+                        selectedTeam[43] = TeamSelectedId;
+                        selectedTeam[44] = Position;
+                        $('#midfielder2').append(PlayerName);
+                        $('#removeMidfielder2').show();
+                    }
+                    else if (Position == "Midfielder" && midfielders == 3) {
+                         selectedTeam[45] = PlayerName;
+                        selectedTeam[46] = PlayerId;
+                        selectedTeam[47] = TotalPoints;
+                        selectedTeam[48] = TeamSelectedId;
+                        selectedTeam[49] = Position;
+                        $('#midfielder3').append(PlayerName);
+                        $('#removeMidfielder3').show();
+                    }
+                    else if (Position == "Midfielder" && midfielders == 4) {
+                         selectedTeam[50] = PlayerName;
+                        selectedTeam[51] = PlayerId;
+                        selectedTeam[52] = TotalPoints;
+                        selectedTeam[53] = TeamSelectedId;
+                        selectedTeam[54] = Position;
+                        $('#midfielder4').append(PlayerName);
+                        $('#removeMidfielder4').show();
+                    }
+                    else if (Position == "Midfielder" && midfielders == 5) {
+                         selectedTeam[55] = PlayerName;
+                        selectedTeam[56] = PlayerId;
+                        selectedTeam[57] = TotalPoints;
+                        selectedTeam[58] = TeamSelectedId;
+                        selectedTeam[59] = Position;
+                        $('#midfielder5').append(PlayerName);
+                        $('#removeMidfielder5').show();
+                    }
+                    else if (Position == "Attacker" && attackers == 1) {
+                         selectedTeam[60] = PlayerName;
+                        selectedTeam[61] = PlayerId;
+                        selectedTeam[62] = TotalPoints;
+                        selectedTeam[63] = TeamSelectedId;
+                        selectedTeam[64] = Position;
+                        $('#attacker1').append(PlayerName);
+                        $('#removeAttacker1').show();
+                    }
+                    else if (Position == "Attacker" && attackers == 2) {
+                         selectedTeam[65] = PlayerName;
+                        selectedTeam[66] = PlayerId;
+                        selectedTeam[67] = TotalPoints;
+                        selectedTeam[68] = TeamSelectedId;
+                        selectedTeam[69] = Position;
+                        $('#attacker2').append(PlayerName);
+                        $('#removeAttacker2').show();
+                    }
+                    else if (Position == "Attacker" && attackers == 3) {
+                         selectedTeam[70] = PlayerName;
+                        selectedTeam[71] = PlayerId;
+                        selectedTeam[72] = TotalPoints;
+                        selectedTeam[73] = TeamSelectedId;
+                        selectedTeam[74] = Position;
+                        $('#attacker3').append(PlayerName);
+                        $('#removeAttacker3').show();
+                    }
+                    else if (Position == "Attacker" && attackers >= 4) {
+                        alert("You have selected the maximum attackers");
+                    }
+                    else if (Position == "Midfielder" && midfielders >= 6) {
+                        alert("You have selected the maximum midfielders");
+                    }
+                    else if (Position == "Goalkeeper" && goalkeepers >= 3) {
+                        alert("You have selected the maximum goalkeepers");
+                    }
+                    else if (Position == "Defender" && defenders >= 6) {
+                        alert("You have selected the maximum defenders");
+                    }
+                }                              
+            }
+
+        }
+
+    });
+
+    function SubmitSelectedPlayers() {
+        var player11 = {
+            "Goalkeeper1": selectedTeam[0], "GoalkeeperId1": Number(selectedTeam[1]), "GoalkeeperPoints1": Number(selectedTeam[2]), "GoalkeeperTeamId1": selectedTeam[3], "GoalkeeperPosition1": selectedTeam[4],
+            "Goalkeeper2": selectedTeam[5], "GoalkeeperId2": Number(selectedTeam[6]), "GoalkeeperPoints2": Number(selectedTeam[7]), "GoalkeeperTeamId2": Number(selectedTeam[8]), "GoalkeeperPosition2": selectedTeam[9],
+            "Defender1": selectedTeam[10], "DefenderId1": Number(selectedTeam[11]), "DefenderPoints1": Number(selectedTeam[12]), "DefenderTeamId1": Number(selectedTeam[13]), "DefenderPosition1": selectedTeam[14],
+            "Defender2": selectedTeam[15], "DefenderId2": Number(selectedTeam[16]), "DefenderPoints2": Number(selectedTeam[17]), "DefenderTeamId2": Number(selectedTeam[18]), "DefenderPosition2": selectedTeam[19],
+            "Defender3": selectedTeam[20], "DefenderId3": Number(selectedTeam[21]), "DefenderPoints3": Number(selectedTeam[22]), "DefenderTeamId3": Number(selectedTeam[23]), "DefenderPosition3": selectedTeam[24],
+            "Defender4": selectedTeam[25], "DefenderId4": Number(selectedTeam[26]), "DefenderPoints4": Number(selectedTeam[27]), "DefenderTeamId4": Number(selectedTeam[28]), "DefenderPosition4": selectedTeam[29],
+            "Defender5": selectedTeam[30], "DefenderId5": Number(selectedTeam[31]), "DefenderPoints5": Number(selectedTeam[32]), "DefenderTeamId5": Number(selectedTeam[33]), "DefenderPosition5": selectedTeam[34],
+            "Midfielder1": selectedTeam[35], "MidfielderId1": Number(selectedTeam[36]), "MidfielderPoints1": Number(selectedTeam[37]), "MidfielderTeamId1": Number(selectedTeam[38]), "MidfielderPosition1": selectedTeam[39],
+            "Midfielder2": selectedTeam[40], "MidfielderId2": Number(selectedTeam[41]), "MidfielderPoints2": Number(selectedTeam[42]), "MidfielderTeamId2": Number(selectedTeam[43]), "MidfielderPosition2": selectedTeam[44],
+            "Midfielder3": selectedTeam[45], "MidfielderId3": Number(selectedTeam[46]), "MidfielderPoints3": Number(selectedTeam[47]), "MidfielderTeamId3": Number(selectedTeam[48]), "MidfielderPosition3": selectedTeam[49],
+            "Midfielder4": selectedTeam[50], "MidfielderId4": Number(selectedTeam[51]), "MidfielderPoints4": Number(selectedTeam[52]), "MidfielderTeamId4": Number(selectedTeam[53]), "MidfielderPosition4": selectedTeam[54],
+            "Midfielder5": selectedTeam[55], "MidfielderId5": Number(selectedTeam[56]), "MidfielderPoints5": Number(selectedTeam[57]), "MidfielderTeamId5": Number(selectedTeam[58]), "MidfielderPosition5": selectedTeam[59],
+            "Attacker1": selectedTeam[60], "AttackerId1": Number(selectedTeam[61]), "AttackerPoints1": Number(selectedTeam[62]), "AttackerTeamId1": Number(selectedTeam[63]), "AttackerPosition1": selectedTeam[64],
+            "Attacker2": selectedTeam[65], "AttackerId2": Number(selectedTeam[66]), "AttackerPoints2": Number(selectedTeam[67]), "AttackerTeamId2": Number(selectedTeam[68]), "AttackerPosition2": selectedTeam[69],
+            "Attacker3": selectedTeam[70], "AttackerId3": Number(selectedTeam[71]), "AttackerPoints3": Number(selectedTeam[72]), "AttackerTeamId3": Number(selectedTeam[73]), "AttackerPosition3": selectedTeam[74]
+        };
+        $.ajax({
+            type: "PUT",
+            data: JSON.stringify(player11),
+            url: fullurl,
+            contentType: "application/json",
+        });
+    }
+
+    function RemovePlayer1() {
+        firstPlayerRemoved = firstPlayerRemoved + 1;
+        $("#goalkeeper1").empty();
+        $("#removeGoalkeeper1").hide();
+        selectedTeam[0] = "";
+        selectedTeam[1] = "";
+        selectedTeam[2] = "";
+        selectedTeam[3] = "";
+        selectedTeam[4] = "";
+    }
+    function RemovePlayer2() {
+        secondPlayerRemoved = secondPlayerRemoved + 1;
+        $("#goalkeeper2").empty();
+        $("#removeGoalkeeper2").hide();
+        selectedTeam[5] = "";
+        selectedTeam[6] = "";
+        selectedTeam[7] = "";
+        selectedTeam[8] = "";
+        selectedTeam[9] = "";
+    }
+    function RemovePlayer3() {
+        thirdPlayerRemoved = thirdPlayerRemoved + 1;
+        $("#defender1").empty();
+        $("#removeDefender1").hide();
+        selectedTeam[10] = "";
+        selectedTeam[11] = "";
+        selectedTeam[12] = "";
+        selectedTeam[13] = "";
+        selectedTeam[14] = "";
+    }
+    function RemovePlayer4() {
+        fourthPlayerRemoved = fourthPlayerRemoved + 1;
+        $("#defender2").empty();
+        $("#removeDefender2").hide();
+        selectedTeam[15] = "";
+        selectedTeam[16] = "";
+        selectedTeam[17] = "";
+        selectedTeam[18] = "";
+        selectedTeam[19] = "";
+    }
+    function RemovePlayer5() {
+        fifthPlayerRemoved = fifthPlayerRemoved + 1;
+        $("#defender3").empty();
+        $("#removeDefender3").hide();
+        selectedTeam[20] = "";
+        selectedTeam[21] = "";
+        selectedTeam[22] = "";
+        selectedTeam[23] = "";
+        selectedTeam[24] = "";
+    }
+    function RemovePlayer6() {
+        sixthPlayerRemoved = sixthPlayerRemoved + 1;
+        $("#defender4").empty();
+        $("#removeDefender4").hide();
+        selectedTeam[25] = "";
+        selectedTeam[26] = "";
+        selectedTeam[27] = "";
+        selectedTeam[28] = "";
+        selectedTeam[29] = "";
+    }
+    function RemovePlayer7() {
+        seventhPlayerRemoved = seventhPlayerRemoved + 1;
+        $("#defender5").empty();
+        $("#removeDefender5").hide();
+        selectedTeam[30] = "";
+        selectedTeam[31] = "";
+        selectedTeam[32] = "";
+        selectedTeam[33] = "";
+        selectedTeam[34] = "";
+    }
+    function RemovePlayer8() {
+        eighthPlayerRemoved = eighthPlayerRemoved + 1;
+        $("#midfielder1").empty();
+        $("#removeMidfielder1").hide();
+        selectedTeam[35] = "";
+        selectedTeam[36] = "";
+        selectedTeam[37] = "";
+        selectedTeam[38] = "";
+        selectedTeam[39] = "";
+    }
+    function RemovePlayer9() {
+        ninthPlayerRemoved = ninthPlayerRemoved + 1;
+        $("#midfielder2").empty();
+        $("#removeMidfielder2").hide();
+        selectedTeam[40] = "";
+        selectedTeam[41] = "";
+        selectedTeam[42] = "";
+        selectedTeam[43] = "";
+        selectedTeam[44] = "";
+    }
+    function RemovePlayer10() {
+        tenthPlayerRemoved = tenthPlayerRemoved + 1;
+        $("#midfielder3").empty();
+        $("#removeMidfielder3").hide();
+        selectedTeam[45] = "";
+        selectedTeam[46] = "";
+        selectedTeam[47] = "";
+        selectedTeam[48] = "";
+        selectedTeam[49] = "";
+    }
+    function RemovePlayer11() {
+        eleventhPlayerRemoved = eleventhPlayerRemoved + 1;
+        $("#midfielder4").empty();
+        $("#removeMidfielder4").hide();
+        selectedTeam[50] = "";
+        selectedTeam[51] = "";
+        selectedTeam[52] = "";
+        selectedTeam[53] = "";
+        selectedTeam[54] = "";
+    }
+    function RemovePlayer12() {
+        twelfthPlayerRemoved = twelfthPlayerRemoved + 1;
+        $("#midfielder5").empty();
+        $("#removeMidfielder5").hide();
+        selectedTeam[55] = "";
+        selectedTeam[56] = "";
+        selectedTeam[57] = "";
+        selectedTeam[58] = "";
+        selectedTeam[59] = "";
+    }
+    function RemovePlayer13() {
+        thirteenthPlayerRemoved = thirteenthPlayerRemoved + 1;
+        $("#attacker1").empty();
+        $("#removeAttacker1").hide();
+        selectedTeam[60] = "";
+        selectedTeam[61] = "";
+        selectedTeam[62] = "";
+        selectedTeam[63] = "";
+        selectedTeam[64] = "";
+    }
+    function RemovePlayer14() {
+        fourteenthPlayerRemoved = fourteenthPlayerRemoved + 1;
+        $("#attacker2").empty();
+        $("#removeAttacker2").hide();
+        selectedTeam[65] = "";
+        selectedTeam[66] = "";
+        selectedTeam[67] = "";
+        selectedTeam[68] = "";
+        selectedTeam[69] = "";
+    }
+    function RemovePlayer15() {
+        fifteenthPlayerRemoved = fifteenthPlayerRemoved + 1;
+        $("#attacker3").empty();
+        $("#removeAttacker3").hide();
+        selectedTeam[70] = "";
+        selectedTeam[71] = "";
+        selectedTeam[72] = "";
+        selectedTeam[73] = "";
+        selectedTeam[74] = "";
+    }
+
+</script>
+

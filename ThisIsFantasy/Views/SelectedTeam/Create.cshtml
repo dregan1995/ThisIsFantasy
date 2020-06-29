@@ -1,0 +1,23 @@
+﻿
+@{
+    ViewBag.Title = "Create";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Create</h2>
+
+@section scripts
+{
+    <script>
+        $(document).ready(function () {
+            //var customer = { Car1: "", Car2: "", Car3: "" };
+            //$.ajax({
+            //    type: "POST",
+            //    data: JSON.stringify(customer),
+            //    url: "https://localhost:44399/api/CarsTest",
+            //    contentType: "application/json"
+            //});
+            window.location.replace("https://localhost:44324/SelectedTeam/List");
+        });
+    </script>
+}

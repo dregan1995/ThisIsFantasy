@@ -1,0 +1,545 @@
+﻿@model ThisIsFantasy.ViewModels.PlayerClubViewModel
+
+@{
+    ViewBag.Title = "Onego";
+}
+
+<h2>Onego</h2>
+<table class="table table-bordered table-hover">
+    <thead>
+        <tr>
+            <th>Player Name</th>
+            <th>Team Name</th>
+            <th>Position</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var player in Model.Players)
+        {
+            <tr>
+                <td>@player.Name</td>
+                <td>@player.Team.Name</td>
+                <td>@player.Position</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@model ThisIsFantasy.ViewModels.PlayerClubViewModel
+
+@{
+    ViewBag.Title = "Index";
+}
+<br />
+@Html.DropDownList("drop1", ViewBag.data1 as IEnumerable<SelectListItem>, new { @class = "form-control" })
+@foreach (var team in Model.Teams)
+{
+
+
+    int number = 0;
+    number = number + 1;
+    string rowId = String.Format("sour{0}", number);
+    if (!Model.Teams.Any())
+    {
+
+
+        <p>We don't have any teams yet.</p>
+    }
+    else
+    {
+        <div id=@team.Id>
+            <h2 class="h2" onclick="ViewTable(@team.Id);">@team.Name</h2>
+            <table class="table table-bordered table-hover">
+                <thead>
+                    <tr>
+                        <th hidden="hidden">Id</th>
+                        <th>Player Name</th>
+                        <th>Team Name</th>
+                        <th>Position</th>
+                        <th>Total Points</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var player in Model.Players)
+                    {
+                        if (player.TeamId == team.Id && player.Position != null)
+                        {
+
+
+
+                            <tr>
+                                <td hidden="hidden">
+                                    <input type="text" value="@player.Id" name="Id" />
+                                </td>
+                                <td id="playerName">
+                                    <input type="button" value="@player.Name" name="Name" class="playerName" />
+                                </td>
+                                <td>
+                                    <label id="TeamName">@team.Name</label>
+                                </td>
+                                <td id="position">@player.Position</td>
+                                @foreach (var playerStat in Model.PlayerStats)
+                                {
+                                    if (player.Id == playerStat.PlayerId)
+                                    {
+                                        <td>
+                                            @*<input type="text" value="@playerStat.TotalPoints" name="TotalPoints" contenteditable="false" />*@
+                                            <label id="TotalPoints">@playerStat.TotalPoints</label>
+                                        </td>
+                                    }
+                                }
+                            </tr>
+                        }
+                    }
+                </tbody>
+            </table>
+        </div>
+
+    }
+}
+<div id="pv">
+    @Html.Action("SelectedTeamPartialView", new { id = Url.RequestContext.RouteData.Values["id"] })
+</div>
+
+
+@*@foreach (var player in Model.Players)
+    {
+        if (player.Position == "Attacker" )
+        {
+            <tr>
+                <td>@player.Name</td>
+                <td>@player.TeamName</td>
+                <td>@player.Position</td>
+                @foreach (var playerStat in Model.PlayerStats)
+                {
+                    if (player.Id == playerStat.PlayerId)
+                    {
+                        <td>
+                            @playerStat.TotalPoints
+                        </td>
+                    }
+                }
+            </tr>
+        }
+    }*@
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+<script type="text/javascript" src="http://ajax.cdnjs.com/ajax/libs/json2/20110223/json2.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<script type="text/javascript">
+
+    $(document).ready(function () {
+        //$('table').hide();
+        $('#62').hide();
+        $('#57').hide();
+        $('#58').hide();
+        $('#61').hide();
+        $('#64').hide();
+        $('#65').hide();
+        $('#66').hide();
+        $('#67').hide();
+        $('#68').hide();
+        $('#73').hide();
+        $('#76').hide();
+        $('#328').hide();
+        $('#338').hide();
+        $('#340').hide();
+        $('#346').hide();
+        $('#354').hide();
+        $('#356').hide();
+        $('#397').hide();
+        $('#563').hide();
+        $('#1044').hide();
+        $("#drop1").change(function () {
+            var id = $('#drop1').val();
+            if ($('#62').is(":visible")) {
+                $('#62').hide();
+                $('#' + id).show();
+            }
+            if ($('#57').is(":visible")) {
+                $('#57').hide();
+                $('#' + id).show();
+            }
+            if ($('#58').is(":visible")) {
+                $('#58').hide();
+                $('#' + id).show();
+            }
+            if ($('#61').is(":visible")) {
+                $('#61').hide();
+                $('#' + id).show();
+            }
+            if ($('#64').is(":visible")) {
+                $('#64').hide();
+                $('#' + id).show();
+            }
+            if ($('#65').is(":visible")) {
+                $('#65').hide();
+                $('#' + id).show();
+            }
+            if ($('#66').is(":visible")) {
+                $('#66').hide();
+                $('#' + id).show();
+            }
+            if ($('#67').is(":visible")) {
+                $('#67').hide();
+                $('#' + id).show();
+            }
+            if ($('#68').is(":visible")) {
+                $('#68').hide();
+                $('#' + id).show();
+            }
+            if ($('#73').is(":visible")) {
+                $('#73').hide();
+                $('#' + id).show();
+            }
+            if ($('#76').is(":visible")) {
+                $('#76').hide();
+                $('#' + id).show();
+            }
+            if ($('#328').is(":visible")) {
+                $('#328').hide();
+                $('#' + id).show();
+            }
+            if ($('#338').is(":visible")) {
+                $('#338').hide();
+                $('#' + id).show();
+            }
+            if ($('#340').is(":visible")) {
+                $('#340').hide();
+                $('#' + id).show();
+            }
+            if ($('#346').is(":visible")) {
+                $('#346').hide();
+                $('#' + id).show();
+            }
+            if ($('#354').is(":visible")) {
+                $('#354').hide();
+                $('#' + id).show();
+            }
+            if ($('#356').is(":visible")) {
+                $('#356').hide();
+                $('#' + id).show();
+            }
+            if ($('#397').is(":visible")) {
+                $('#397').hide();
+                $('#' + id).show();
+            }
+            if ($('#563').is(":visible")) {
+                $('#563').hide();
+                $('#' + id).show();
+            }
+            if ($('#1044').is(":visible")) {
+                $('#1044').hide();
+                $('#' + id).show();
+            }
+            $('#' + id).show();
+        });
+    });
+
+    //function ViewTable(id) {
+    //    if ($('#' + id).is(":visible")) {
+    //        $('#' + id).hide();
+    //    } else {
+    //        $('#' + id).show();
+    //    }
+
+    //    function HideTable(id) {
+    //            $('#' + id).hide();
+    //        }
+
+    //}
+    var cclick = 0;
+    var root = "https://localhost:44324/api/ManageTeams/";
+    var url = window.location.href;
+    var id = url.substring(url.lastIndexOf('/') + 1);
+    var fullurl = root.concat(id);
+
+
+    $(".playerName").click(function () {
+        var teamsSelected = [team1];
+
+        cclick = cclick + 1;
+        if (cclick == 1) {
+            var tr = $(this).closest('tr');
+            var teamSelected = tr.find('label[id = "TeamName"]').text();
+            var team1 = teamSelected;
+            alert(teamsSelected[0]);
+            var FirstCol = tr.find('input[name="Name"]').val();
+            var SecondCol = tr.find('input[name="Id"]').val();
+            var ThirdCol = tr.find('label[id="TotalPoints"]').text();
+            
+            alert(fullurl);
+            var player1 = { "Id": id, "PlayerName1": FirstCol, "PlayerStatId1": SecondCol, "TotalPoints1": ThirdCol };
+            $.ajax({
+                type: "PUT",
+                data: JSON.stringify(player1),
+                url: fullurl,
+                contentType: "application/json",
+            });
+            var controller = '/ManageTeams/SelectedTeamPartialView/';
+            var controllerId = controller.concat(id);
+            $('#pv').load(controllerId);
+        }
+        else if (cclick == 2) {
+            var teamSelected = tr.find('label[id = "TeamName"]').text();
+            var team2 = teamSelected;
+            var tr = $(this).closest('tr');
+            var FirstCol = tr.find('input[name="Name"]').val();
+            var SecondCol = tr.find('input[name="Id"]').val();
+            var ThirdCol = tr.find('label[id = "TotalPoints"]').text();
+
+            var bool = teamsSelected.includes(team2);
+            if (bool == "true") {
+                alert("already selected");
+            }
+
+            else {
+                var player2 = { "Id": id, "PlayerName2": FirstCol, "PlayerStatId2": SecondCol, "TotalPoints2": ThirdCol };
+                $.ajax({
+                    type: "PUT",
+                    data: JSON.stringify(player2),
+                    url: fullurl,
+                    contentType: "application/json",
+                });
+                var controller = '/ManageTeams/SelectedTeamPartialView/';
+                var controllerId = controller.concat(id);
+                $('#pv').load(controllerId);
+            }
+        }
+        //else if (cclick == 3) {
+        //    var tr = $(this).closest('tr');
+        //    var teamSelected = tr.find('label[id = "TeamName"]').text();
+        //    team2 = teamSelected;
+        //    var bool = teamsSelected.includes(team2);
+        //    if (bool == "true") {
+        //        alert("already selected");
+        //    }
+        //    else {
+        //        var FirstCol = tr.find('input[name="Name"]').val();
+        //        var SecondCol = tr.find('input[name="Id"]').val();
+        //        var ThirdCol = tr.find('label[id = "TotalPoints"]').text();
+
+        //        var player3 = { "Id": id, "PlayerName3": FirstCol, "PlayerStatId3": SecondCol, "TotalPoints3": ThirdCol };
+        //        $.ajax({
+        //            type: "PUT",
+        //            data: JSON.stringify(player3),
+        //            url: fullurl,
+        //            contentType: "application/json",
+        //        });
+        //        var controller = '/ManageTeams/SelectedTeamPartialView/';
+        //        var controllerId = controller.concat(id);
+        //        $('#pv').load(controllerId);
+        //    }
+        //}
+        else if (cclick == 4) {
+            var tr = $(this).closest('tr');
+            var FirstCol = tr.find('input[name="Name"]').val();
+            var SecondCol = tr.find('input[name="Id"]').val();
+            var ThirdCol = tr.find('label[id = "TotalPoints"]').text();
+
+            var player4 = { "Id": id, "PlayerName4": FirstCol, "PlayerStatId4": SecondCol, "TotalPoints4": ThirdCol };
+            $.ajax({
+                type: "PUT",
+                data: JSON.stringify(player4),
+                url: fullurl,
+                contentType: "application/json",
+            });
+            var controller = '/ManageTeams/SelectedTeamPartialView/';
+            var controllerId = controller.concat(id);
+            $('#pv').load(controllerId);
+        }
+        else if (cclick == 5) {
+            var tr = $(this).closest('tr');
+            var FirstCol = tr.find('input[name="Name"]').val();
+            var SecondCol = tr.find('input[name="Id"]').val();
+            var ThirdCol = tr.find('label[id = "TotalPoints"]').text();
+
+            var player5 = { "Id": id, "PlayerName5": FirstCol, "PlayerStatId5": SecondCol, "TotalPoints5": ThirdCol };
+            $.ajax({
+                type: "PUT",
+                data: JSON.stringify(player5),
+                url: fullurl,
+                contentType: "application/json",
+            });
+            var controller = '/ManageTeams/SelectedTeamPartialView/';
+            var controllerId = controller.concat(id);
+            $('#pv').load(controllerId);
+        }
+        else if (cclick == 6) {
+            var tr = $(this).closest('tr');
+            var FirstCol = tr.find('input[name="Name"]').val();
+            var SecondCol = tr.find('input[name="Id"]').val();
+            var ThirdCol = tr.find('label[id = "TotalPoints"]').text();
+
+            var player6 = { "Id": id, "PlayerName6": FirstCol, "PlayerStatId6": SecondCol, "TotalPoints6": ThirdCol };
+            $.ajax({
+                type: "PUT",
+                data: JSON.stringify(player6),
+                url: fullurl,
+                contentType: "application/json",
+            });
+            var controller = '/ManageTeams/SelectedTeamPartialView/';
+            var controllerId = controller.concat(id);
+            $('#pv').load(controllerId);
+        }
+        else if (cclick == 7) {
+            var tr = $(this).closest('tr');
+            var FirstCol = tr.find('input[name="Name"]').val();
+            var SecondCol = tr.find('input[name="Id"]').val();
+            var ThirdCol = tr.find('label[id = "TotalPoints"]').text();
+
+            var player7 = { "Id": id, "PlayerName7": FirstCol, "PlayerStatId7": SecondCol, "TotalPoints7": ThirdCol };
+            $.ajax({
+                type: "PUT",
+                data: JSON.stringify(player7),
+                url: fullurl,
+                contentType: "application/json",
+            });
+            var controller = '/ManageTeams/SelectedTeamPartialView/';
+            var controllerId = controller.concat(id);
+            $('#pv').load(controllerId);
+        }
+        else if (cclick == 8) {
+            var tr = $(this).closest('tr');
+            var FirstCol = tr.find('input[name="Name"]').val();
+            var SecondCol = tr.find('input[name="Id"]').val();
+            var ThirdCol = tr.find('label[id = "TotalPoints"]').text();
+
+            var player8 = { "Id": id, "PlayerName8": FirstCol, "PlayerStatId8": SecondCol, "TotalPoints8": ThirdCol };
+            $.ajax({
+                type: "PUT",
+                data: JSON.stringify(player8),
+                url: fullurl,
+                contentType: "application/json",
+            });
+            var controller = '/ManageTeams/SelectedTeamPartialView/';
+            var controllerId = controller.concat(id);
+            $('#pv').load(controllerId);
+        }
+        else if (cclick == 9) {
+            var tr = $(this).closest('tr');
+            var FirstCol = tr.find('input[name="Name"]').val();
+            var SecondCol = tr.find('input[name="Id"]').val();
+            var ThirdCol = tr.find('label[id = "TotalPoints"]').text();
+
+            var player9 = { "Id": id, "PlayerName9": FirstCol, "PlayerStatId9": SecondCol, "TotalPoints9": ThirdCol };
+            $.ajax({
+                type: "PUT",
+                data: JSON.stringify(player9),
+                url: fullurl,
+                contentType: "application/json",
+            });
+            var controller = '/ManageTeams/SelectedTeamPartialView/';
+            var controllerId = controller.concat(id);
+            $('#pv').load(controllerId);
+        }
+        else if (cclick == 10) {
+            var tr = $(this).closest('tr');
+            var FirstCol = tr.find('input[name="Name"]').val();
+            var SecondCol = tr.find('input[name="Id"]').val();
+            var ThirdCol = tr.find('label[id = "TotalPoints"]').text();
+
+            var player10 = { "Id": id, "PlayerName10": FirstCol, "PlayerStatId10": SecondCol, "TotalPoints10": ThirdCol };
+            $.ajax({
+                type: "PUT",
+                data: JSON.stringify(player10),
+                url: fullurl,
+                contentType: "application/json",
+            });
+            var controller = '/ManageTeams/SelectedTeamPartialView/';
+            var controllerId = controller.concat(id);
+            $('#pv').load(controllerId);
+        }
+        else if (cclick == 11) {
+            var tr = $(this).closest('tr');
+            var FirstCol = tr.find('input[name="Name"]').val();
+            var SecondCol = tr.find('input[name="Id"]').val();
+            var ThirdCol = tr.find('label[id = "TotalPoints"]').text();
+
+            var player11 = { "Id": id, "PlayerName11": FirstCol, "PlayerStatId11": SecondCol, "TotalPoints11": ThirdCol };
+            $.ajax({
+                type: "PUT",
+                data: JSON.stringify(player11),
+                url: fullurl,
+                contentType: "application/json",
+            });
+            var controller = '/ManageTeams/SelectedTeamPartialView/';
+            var controllerId = controller.concat(id);
+            $('#pv').load(controllerId);
+        }
+        else if (cclick == 12) {
+            var tr = $(this).closest('tr');
+            var FirstCol = tr.find('input[name="Name"]').val();
+            var SecondCol = tr.find('input[name="Id"]').val();
+            var ThirdCol = tr.find('label[id = "TotalPoints"]').text();
+
+            var player12 = { "Id": id, "PlayerName12": FirstCol, "PlayerStatId12": SecondCol, "TotalPoints12": ThirdCol };
+            $.ajax({
+                type: "PUT",
+                data: JSON.stringify(player12),
+                url: fullurl,
+                contentType: "application/json",
+            });
+            var controller = '/ManageTeams/SelectedTeamPartialView/';
+            var controllerId = controller.concat(id);
+            $('#pv').load(controllerId);
+        }
+        else if (cclick == 13) {
+            var tr = $(this).closest('tr');
+            var FirstCol = tr.find('input[name="Name"]').val();
+            var SecondCol = tr.find('input[name="Id"]').val();
+            var ThirdCol = tr.find('label[id = "TotalPoints"]').text();
+
+            var player13 = { "Id": id, "PlayerName13": FirstCol, "PlayerStatId13": SecondCol, "TotalPoints13": ThirdCol };
+            $.ajax({
+                type: "PUT",
+                data: JSON.stringify(player13),
+                url: fullurl,
+                contentType: "application/json",
+            });
+            var controller = '/ManageTeams/SelectedTeamPartialView/';
+            var controllerId = controller.concat(id);
+            $('#pv').load(controllerId);
+        }
+        else if (cclick == 14) {
+            var tr = $(this).closest('tr');
+            var FirstCol = tr.find('input[name="Name"]').val();
+            var SecondCol = tr.find('input[name="Id"]').val();
+            var ThirdCol = tr.find('label[id = "TotalPoints"]').text();
+
+            var player14 = { "Id": id, "PlayerName14": FirstCol, "PlayerStatId14": SecondCol, "TotalPoints14": ThirdCol };
+            $.ajax({
+                type: "PUT",
+                data: JSON.stringify(player14),
+                url: fullurl,
+                contentType: "application/json",
+            });
+            var controller = '/ManageTeams/SelectedTeamPartialView/';
+            var controllerId = controller.concat(id);
+            $('#pv').load(controllerId);
+        }
+        else if (cclick == 15) {
+            var tr = $(this).closest('tr');
+            var FirstCol = tr.find('input[name="Name"]').val();
+            var SecondCol = tr.find('input[name="Id"]').val();
+            var ThirdCol = tr.find('label[id = "TotalPoints"]').text();
+
+            var player15 = { "Id": id, "PlayerName15": FirstCol, "PlayerStatId15": SecondCol, "TotalPoints15": ThirdCol };
+            $.ajax({
+                type: "PUT",
+                data: JSON.stringify(player15),
+                url: fullurl,
+                contentType: "application/json",
+            });
+            var controller = '/ManageTeams/SelectedTeamPartialView/';
+            var controllerId = controller.concat(id);
+            $('#pv').load(controllerId);
+        }
+
+        $('#pv').load(controllerId);
+
+        function test() {
+            var teamsSelected = [team1, team2]
+        }
+    });
+
+</script>
